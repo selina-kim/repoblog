@@ -1,21 +1,39 @@
 import NextAuth from "next-auth";
-import GitHub from "next-auth/providers/github";
+import GitHubProvider from "next-auth/providers/github";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    GitHub({
+    GitHubProvider({
       clientId: process.env.AUTH_GITHUB_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
     }),
   ],
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
-      const isOnEditor = nextUrl.pathname.includes("/edit");
+    async signIn({ user, profile }) {
+      const allowedEmail = process.env.ALLOWED_USER_EMAIL;
+      const allowedGithubUsername = process.env.ALLOWED_GITHUB_USERNAME;
 
-      if ((isOnDashboard || isOnEditor) && !isLoggedIn) {
+      const isAllowed =
+        (allowedEmail && user.email === allowedEmail) ||
+        (allowedGithubUsername && profile?.login === allowedGithubUsername);
+
+      if (!isAllowed) {
         return false;
+      }
+
+      return true;
+    },
+    authorized: async ({ auth, request: { nextUrl } }) => {
+      const isLoggedIn = !!auth?.user;
+      const isPublicRoute =
+        nextUrl.pathname === "/" || nextUrl.pathname === "/login";
+
+      if (isPublicRoute) {
+        return true;
+      }
+
+      if (!isLoggedIn) {
+        return Response.redirect(new URL("/login", nextUrl));
       }
 
       return true;
