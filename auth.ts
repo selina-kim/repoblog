@@ -6,9 +6,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     GitHubProvider({
       clientId: process.env.AUTH_GITHUB_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
+      authorization: {
+        params: {
+          scope: "read:user user:email repo",
+        },
+      },
+      async profile(profile) {
+        return {
+          name: profile.name,
+          email: profile.email,
+          image: profile.avatar_url,
+          username: profile.login,
+        };
+      },
     }),
   ],
   callbacks: {
+    async jwt({ token, account, profile }) {
+      if (account) {
+        token.accessToken = account.access_token;
+      }
+      if (profile) {
+        token.username = profile.login;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token.username) {
+        session.user.username = token.username as string;
+      }
+      if (token.accessToken) {
+        session.accessToken = token.accessToken as string;
+      }
+      return session;
+    },
     async signIn({ user, profile }) {
       const allowedEmail = process.env.ALLOWED_USER_EMAIL;
       const allowedGithubUsername = process.env.ALLOWED_GITHUB_USERNAME;

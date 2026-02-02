@@ -8,13 +8,13 @@ export default async function LoginPage() {
     redirect("/dashboard");
   }
   return (
-    <div className="flex min-h-screen items-center justify-center font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-center gap-8 py-32 px-16 bg-white dark:bg-black">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 font-sans">
+      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-center gap-8 px-16 py-32">
         <div className="flex flex-col items-center gap-6 text-center">
-          <h1 className="text-5xl font-bold tracking-tight text-black dark:text-zinc-50">
+          <h1 className="text-5xl font-bold tracking-tight text-gray-900">
             RepoBlog
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+          <p className="max-w-md text-lg leading-8 text-gray-600">
             A blog powered by GitHub repositories. Write and manage your content
             with MDX files stored directly in your GitHub repo.
           </p>
@@ -27,7 +27,7 @@ export default async function LoginPage() {
           }}
         >
           <button
-            className="flex h-12 items-center justify-center gap-2 rounded-lg bg-black px-6 text-white transition-colors hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 hover:cursor-pointer"
+            className="flex h-12 items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-white transition-colors hover:cursor-pointer hover:bg-gray-800"
             type="submit"
           >
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
