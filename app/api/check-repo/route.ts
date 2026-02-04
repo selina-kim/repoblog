@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { REPO_NAME } from "@/app/constants";
+import { REPO_NAME } from "@/constants/github";
 import { NextResponse } from "next/server";
 
 export async function GET() {

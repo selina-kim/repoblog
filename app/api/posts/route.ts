@@ -1,37 +1,11 @@
 import { auth } from "@/auth";
-import { REPO_NAME } from "@/app/constants";
+import { REPO_NAME } from "@/constants/github";
 import { NextResponse } from "next/server";
-
-function extractTitleFromMDX(content: string): string | null {
-  const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
-  if (frontmatterMatch) {
-    const titleMatch = frontmatterMatch[1].match(/^title:\s*["']?(.+?)["']?$/m);
-    if (titleMatch) {
-      return titleMatch[1].trim();
-    }
-  }
-  return null;
-}
-
-function extractSlugFromMDX(content: string): string | null {
-  const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
-  if (frontmatterMatch) {
-    const slugMatch = frontmatterMatch[1].match(/^slug:\s*["']?(.+?)["']?$/m);
-    if (slugMatch) {
-      return slugMatch[1].trim();
-    }
-  }
-  return null;
-}
-
-function generateSlugFromFilename(path: string): string {
-  const fileName = path.split("/").pop() || path;
-  return fileName
-    .replace(/\.(md|mdx)$/, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
+import {
+  extractSlugFromMDX,
+  extractTitleFromMDX,
+  generateSlugFromFilename,
+} from "@/utils/mdx-utils";
 
 export async function GET() {
   const session = await auth();
