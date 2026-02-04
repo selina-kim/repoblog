@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { REPO_NAME } from "@/app/constants";
 
 interface UseCheckRepoResult {
   hasRepo: boolean | null;
@@ -24,6 +23,7 @@ export function useCheckRepo(
     }
 
     try {
+      setIsLoading(true);
       setError(null);
 
       const response = await fetch("/api/check-repo");

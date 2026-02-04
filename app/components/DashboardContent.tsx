@@ -9,11 +9,18 @@ interface DashboardContentProps {
 }
 
 export function DashboardContent({ username }: DashboardContentProps) {
-  const { hasRepo } = useCheckRepo(username);
+  const { hasRepo, isLoading, error, refresh } = useCheckRepo(username);
 
   if (hasRepo === true) {
     return <ManagePosts />;
   }
 
-  return <Setup username={username} />;
+  return (
+    <Setup
+      error={error}
+      hasRepo={hasRepo}
+      isLoading={isLoading}
+      refresh={refresh}
+    />
+  );
 }

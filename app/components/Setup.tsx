@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useCheckRepo } from "@/app/hooks/useCheckRepo";
 
 interface SetupProps {
-  username: string;
+  hasRepo: boolean | null;
+  isLoading: boolean;
+  error: string | null;
+  refresh: () => void;
 }
 
-export function Setup({ username }: SetupProps) {
-  const { hasRepo, isLoading, error, refresh } = useCheckRepo(username);
-
+export function Setup({ hasRepo, isLoading, error, refresh }: SetupProps) {
   if (isLoading) {
     return (
       <div className="rounded-lg border border-gray-200 bg-white p-6">
