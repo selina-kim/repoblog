@@ -1,5 +1,6 @@
 import { auth, signIn } from "@/auth";
 import { redirect } from "next/navigation";
+import { AnimatedBackground } from "@/app/components/AnimatedBackground";
 
 export default async function LoginPage() {
   const session = await auth();
@@ -8,14 +9,15 @@ export default async function LoginPage() {
     redirect("/dashboard");
   }
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 font-sans">
+    <div className="relative flex min-h-screen items-center justify-center font-sans">
+      <AnimatedBackground />
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-center gap-8 px-16 py-32">
         <div className="flex flex-col items-center gap-6 text-center">
-          <h1 className="font-sans text-5xl font-bold tracking-tight text-gray-900">
+          <h1 className="font-mono text-5xl font-bold tracking-tight text-gray-900">
             RepoBlog
           </h1>
-          <p className="max-w-md font-serif text-lg leading-8 text-gray-600">
-            A blog powered by <i>GitHub repositories</i>.
+          <p className="max-w-md text-lg leading-8 text-gray-600">
+            A blog powered by GitHub repositories.
             <br />
             Write and manage your content with MDX files stored directly in your
             GitHub repo.
