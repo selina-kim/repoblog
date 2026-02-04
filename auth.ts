@@ -40,13 +40,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session;
     },
-    async signIn({ user, profile }) {
-      const allowedEmail = process.env.ALLOWED_USER_EMAIL;
-      const allowedGithubUsername = process.env.ALLOWED_GITHUB_USERNAME;
+    async signIn({ profile }) {
+      const allowedGithubUsername = process.env.OWNER_GITHUB_USERNAME;
 
       const isAllowed =
-        (allowedEmail && user.email === allowedEmail) ||
-        (allowedGithubUsername && profile?.login === allowedGithubUsername);
+        allowedGithubUsername && profile?.login === allowedGithubUsername;
 
       if (!isAllowed) {
         return false;

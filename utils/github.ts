@@ -71,11 +71,11 @@ function generateSlugFromFilename(path: string): string {
 // build-time data fetching (no user auth, uses env token)
 export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
   const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.GITHUB_REPO_OWNER;
+  const owner = process.env.OWNER_GITHUB_USERNAME;
 
   if (!token || !owner) {
     throw new Error(
-      "GITHUB_TOKEN and GITHUB_REPO_OWNER must be set in environment variables",
+      "GITHUB_TOKEN and OWNER_GITHUB_USERNAME must be set in environment variables",
     );
   }
 
@@ -184,11 +184,11 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.GITHUB_REPO_OWNER;
+  const owner = process.env.OWNER_GITHUB_USERNAME;
 
   if (!token || !owner) {
     throw new Error(
-      "GITHUB_TOKEN and GITHUB_REPO_OWNER must be set in environment variables",
+      "GITHUB_TOKEN and OWNER_GITHUB_USERNAME must be set in environment variables",
     );
   }
 
