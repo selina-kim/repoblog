@@ -7,6 +7,7 @@ interface Post {
   sha: string;
   size: number;
   title: string;
+  slug: string;
 }
 
 export function useGetPosts() {

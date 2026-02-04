@@ -5,14 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const session = await auth();
 
-  if (!session?.user?.username) {
-    return NextResponse.json(
-      { error: "Unauthorized - No username" },
-      { status: 401 },
-    );
-  }
-
-  if (!session.accessToken) {
+  if (!session?.accessToken) {
     return NextResponse.json(
       {
         error:

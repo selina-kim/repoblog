@@ -1,6 +1,13 @@
-import { auth } from "@/auth";
 import { REPO_NAME } from "@/app/constants";
-import { NextResponse } from "next/server";
+
+export interface Post {
+  path: string;
+  sha: string;
+  size: number;
+  title: string;
+  slug: string;
+  content: string;
+}
 
 function extractTitleFromMDX(content: string): string | null {
   const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
@@ -33,58 +40,51 @@ function generateSlugFromFilename(path: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-export async function GET() {
-  const session = await auth();
+// build-time data fetching (no user auth, uses env token)
+export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
+  const token = process.env.GITHUB_TOKEN;
+  const owner = process.env.GITHUB_REPO_OWNER;
 
-  if (!session?.accessToken) {
-    return NextResponse.json(
-      {
-        error:
-          "Unauthorized - No access token. Please sign out and sign in again.",
-      },
-      { status: 401 },
+  if (!token || !owner) {
+    throw new Error(
+      "GITHUB_TOKEN and GITHUB_REPO_OWNER must be set in environment variables",
     );
   }
 
-  const username = session.user.username;
   try {
-    // get the repository info to find the default branch
+    // get repository info to find default branch
     const repoResponse = await fetch(
-      `https://api.github.com/repos/${username}/${REPO_NAME}`,
+      `https://api.github.com/repos/${owner}/${REPO_NAME}`,
       {
         headers: {
-          Authorization: `Bearer ${session.accessToken}`,
+          Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github+json",
         },
+        next: { revalidate: 0 }, // don't cache at build time
       },
     );
 
     if (!repoResponse.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch repository info" },
-        { status: repoResponse.status },
-      );
+      throw new Error("Failed to fetch repository info");
     }
 
     const repoData = await repoResponse.json();
     const defaultBranch = repoData.default_branch;
 
-    // fetch the file tree from the default branch
+    // Fetch file tree
     const treeResponse = await fetch(
-      `https://api.github.com/repos/${username}/${REPO_NAME}/git/trees/${defaultBranch}?recursive=1`,
+      `https://api.github.com/repos/${owner}/${REPO_NAME}/git/trees/${defaultBranch}?recursive=1`,
       {
         headers: {
-          Authorization: `Bearer ${session.accessToken}`,
+          Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github+json",
         },
+        next: { revalidate: 0 },
       },
     );
 
     if (!treeResponse.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch file tree" },
-        { status: treeResponse.status },
-      );
+      throw new Error("Failed to fetch file tree");
     }
 
     const treeData = await treeResponse.json();
@@ -96,23 +96,24 @@ export async function GET() {
         (item.path.endsWith(".md") || item.path.endsWith(".mdx")),
     );
 
-    // fetch titles for MDX files
-    const postsWithTitles = await Promise.all(
+    // fetch metadata for each file
+    const posts = await Promise.all(
       mdFiles.map(async (item: { path: string; sha: string; size: number }) => {
         const fileName = item.path.split("/").pop() || item.path;
         let title = fileName.replace(/\.(md|mdx)$/, "");
         let slug = generateSlugFromFilename(item.path);
 
-        // only fetch content for MDX files to extract title and slug
+        // fetch content for MDX files to extract metadata
         if (item.path.endsWith(".mdx")) {
           try {
             const contentResponse = await fetch(
-              `https://api.github.com/repos/${username}/${REPO_NAME}/contents/${item.path}?ref=${defaultBranch}`,
+              `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${item.path}?ref=${defaultBranch}`,
               {
                 headers: {
-                  Authorization: `Bearer ${session.accessToken}`,
+                  Authorization: `Bearer ${token}`,
                   Accept: "application/vnd.github+json",
                 },
+                next: { revalidate: 0 },
               },
             );
 
@@ -146,12 +147,77 @@ export async function GET() {
       }),
     );
 
-    return NextResponse.json({ posts: postsWithTitles });
+    return posts;
   } catch (error) {
-    console.error("Error fetching posts:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch posts" },
-      { status: 500 },
+    console.error("Error in getAllPosts:", error);
+    return [];
+  }
+}
+
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  const token = process.env.GITHUB_TOKEN;
+  const owner = process.env.GITHUB_REPO_OWNER;
+
+  if (!token || !owner) {
+    throw new Error(
+      "GITHUB_TOKEN and GITHUB_REPO_OWNER must be set in environment variables",
     );
+  }
+
+  try {
+    const posts = await getAllPosts();
+    const post = posts.find((p) => p.slug === slug);
+
+    if (!post) {
+      return null;
+    }
+
+    // get repository info to find default branch
+    const repoResponse = await fetch(
+      `https://api.github.com/repos/${owner}/${REPO_NAME}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github+json",
+        },
+        next: { revalidate: 0 },
+      },
+    );
+
+    if (!repoResponse.ok) {
+      throw new Error("Failed to fetch repository info");
+    }
+
+    const repoData = await repoResponse.json();
+    const defaultBranch = repoData.default_branch;
+
+    // fetch full content
+    const contentResponse = await fetch(
+      `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${post.path}?ref=${defaultBranch}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github+json",
+        },
+        next: { revalidate: 0 },
+      },
+    );
+
+    if (!contentResponse.ok) {
+      return null;
+    }
+
+    const contentData = await contentResponse.json();
+    const content = Buffer.from(contentData.content, "base64").toString(
+      "utf-8",
+    );
+
+    return {
+      ...post,
+      content,
+    };
+  } catch (error) {
+    console.error("Error in getPostBySlug:", error);
+    return null;
   }
 }
