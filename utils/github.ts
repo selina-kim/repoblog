@@ -7,6 +7,34 @@ export interface Post {
   title: string;
   slug: string;
   content: string;
+  metadata?: Record<string, string>;
+}
+
+function extractFrontmatter(content: string): {
+  metadata: Record<string, string>;
+  content: string;
+} {
+  const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (!frontmatterMatch) {
+    return { metadata: {}, content };
+  }
+
+  const frontmatter = frontmatterMatch[1];
+  const contentWithoutFrontmatter = content
+    .slice(frontmatterMatch[0].length)
+    .trim();
+
+  const metadata: Record<string, string> = {};
+  const lines = frontmatter.split("\n");
+
+  for (const line of lines) {
+    const match = line.match(/^([\w-]+):\s*["']?(.+?)["']?$/);
+    if (match) {
+      metadata[match[1]] = match[2].trim();
+    }
+  }
+
+  return { metadata, content: contentWithoutFrontmatter };
 }
 
 function extractTitleFromMDX(content: string): string | null {
@@ -208,13 +236,15 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     }
 
     const contentData = await contentResponse.json();
-    const content = Buffer.from(contentData.content, "base64").toString(
+    const rawContent = Buffer.from(contentData.content, "base64").toString(
       "utf-8",
     );
+    const { metadata, content } = extractFrontmatter(rawContent);
 
     return {
       ...post,
       content,
+      metadata,
     };
   } catch (error) {
     console.error("Error in getPostBySlug:", error);

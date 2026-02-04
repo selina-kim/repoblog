@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug } from "@/utils/github";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
+import "./mdxStyle.css";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
@@ -26,9 +27,27 @@ export default async function BlogPostPage({
       <article className="mx-auto max-w-3xl px-4">
         <div className="mb-8">
           <h1 className="mb-4 text-4xl font-bold text-gray-900">
-            {post.title}
+            {post.metadata?.title || post.title}
           </h1>
-          <p className="text-sm text-gray-500">{post.path}</p>
+          {post.metadata?.date && (
+            <p className="mb-2 text-sm text-gray-500">
+              {new Date(post.metadata.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          )}
+          {post.metadata?.author && (
+            <p className="mb-2 text-sm text-gray-600">
+              By {post.metadata.author}
+            </p>
+          )}
+          {post.metadata?.description && (
+            <p className="mt-4 text-lg text-gray-600">
+              {post.metadata.description}
+            </p>
+          )}
         </div>
 
         <div className="prose prose-gray max-w-none rounded-lg border border-gray-200 bg-white p-8">
