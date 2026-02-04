@@ -1,4 +1,5 @@
 import { REPO_NAME } from "@/app/constants";
+import { env } from "@/env";
 
 export interface Post {
   path: string;
@@ -70,8 +71,8 @@ function generateSlugFromFilename(path: string): string {
 
 // build-time data fetching (no user auth, uses env token)
 export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
-  const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.OWNER_GITHUB_USERNAME;
+  const token = env.GITHUB_TOKEN;
+  const owner = env.OWNER_GITHUB_USERNAME;
 
   if (!token || !owner) {
     throw new Error(
@@ -183,8 +184,8 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.OWNER_GITHUB_USERNAME;
+  const token = env.GITHUB_TOKEN;
+  const owner = env.OWNER_GITHUB_USERNAME;
 
   if (!token || !owner) {
     throw new Error(
