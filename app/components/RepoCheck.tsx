@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCheckRepo } from "@/app/hooks/useCheckRepo";
+import { Loader } from "./Loader";
 
 interface RepoCheckProps {
   username: string;
@@ -14,7 +15,7 @@ export function RepoCheck({ username }: RepoCheckProps) {
     return (
       <div className="rounded-lg border border-gray-200 bg-white p-6">
         <div className="flex items-center gap-2 text-gray-600">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+          <Loader />
           Checking for repository...
         </div>
       </div>
