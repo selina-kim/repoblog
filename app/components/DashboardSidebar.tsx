@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Session } from "next-auth";
 import { FileIcon } from "@/assets/icons/FileIcon";
-import { PaintBrushIcon } from "@/assets/icons/PaintBrushIcon";
+import { PaletteIcon } from "@/assets/icons/PaletteIcon";
 import { handleSignOut } from "../actions/auth";
 
 const navItems = [
@@ -16,7 +16,7 @@ const navItems = [
   {
     name: "Appearance",
     href: "/dashboard/appearance",
-    icon: <PaintBrushIcon className="h-5 w-5" />,
+    icon: <PaletteIcon className="h-5 w-5" />,
   },
 ];
 

@@ -6,16 +6,11 @@ export function FolderIcon({ className }: FolderIconProps) {
   return (
     <svg
       className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
+      fill="currentColor"
+      viewBox="0 -960 960 960"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      <path
-        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-      />
+      <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z" />
     </svg>
   );
 }
