@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Setup } from "./Setup";
 
 interface RepoCheckProps {
