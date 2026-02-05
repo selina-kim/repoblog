@@ -58,7 +58,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isPublicRoute =
         nextUrl.pathname === "/" ||
         nextUrl.pathname === "/login" ||
-        nextUrl.pathname.startsWith("/post");
+        nextUrl.pathname.startsWith("/post") ||
+        nextUrl.pathname.startsWith("/images") ||
+        nextUrl.pathname.startsWith("/api/images");
 
       if (isPublicRoute) {
         return true;

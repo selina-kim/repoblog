@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 import { createDefaultConfigInRepo } from "@/utils/blog-config";
-import { ENV } from "@/env";
 import { CONFIG_FILENAME, REPO_NAME } from "@/constants/github";
 
 export async function POST() {
