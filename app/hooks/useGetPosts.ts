@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { TreeNode } from "@/types/blog";
 
 interface Post {
   path: string;
@@ -12,6 +13,7 @@ interface Post {
 
 export function useGetPosts() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [tree, setTree] = useState<TreeNode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,10 +29,12 @@ export function useGetPosts() {
 
         const data = await response.json();
         setPosts(data.posts || []);
+        setTree(data.tree || []);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch posts");
         setPosts([]);
+        setTree([]);
       } finally {
         setIsLoading(false);
       }
@@ -39,5 +43,5 @@ export function useGetPosts() {
     fetchPosts();
   }, []);
 
-  return { posts, isLoading, error };
+  return { posts, tree, isLoading, error };
 }

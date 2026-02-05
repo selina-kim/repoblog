@@ -8,6 +8,16 @@ export interface Post {
   metadata?: Record<string, string>;
 }
 
+export interface TreeNode {
+  name: string;
+  path: string;
+  type: "file" | "folder";
+  sha?: string;
+  children?: TreeNode[];
+  title?: string;
+  slug?: string;
+}
+
 export interface HeadingStyle {
   color: string;
   size: number;

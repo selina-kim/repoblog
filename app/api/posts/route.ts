@@ -1,11 +1,63 @@
 import { auth } from "@/auth";
 import { REPO_NAME } from "@/constants/github";
 import { NextResponse } from "next/server";
+import type { TreeNode } from "@/types/blog";
 import {
   extractSlugFromMDX,
   extractTitleFromMDX,
   generateSlugFromFilename,
 } from "@/utils/mdx-utils";
+
+function buildTree(
+  items: {
+    path: string;
+    sha: string;
+    size: number;
+    title?: string;
+    slug?: string;
+  }[],
+): TreeNode[] {
+  const root: TreeNode[] = [];
+  const folderMap = new Map<string, TreeNode>();
+
+  for (const item of items) {
+    const parts = item.path.split("/");
+    let currentLevel = root;
+    let currentPath = "";
+
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      currentPath = currentPath ? `${currentPath}/${part}` : part;
+      const isFile = i === parts.length - 1;
+
+      if (isFile) {
+        currentLevel.push({
+          name: part,
+          path: item.path,
+          type: "file",
+          sha: item.sha,
+          title: item.title,
+          slug: item.slug,
+        });
+      } else {
+        let folder = folderMap.get(currentPath);
+        if (!folder) {
+          folder = {
+            name: part,
+            path: currentPath,
+            type: "folder",
+            children: [],
+          };
+          folderMap.set(currentPath, folder);
+          currentLevel.push(folder);
+        }
+        currentLevel = folder.children!;
+      }
+    }
+  }
+
+  return root;
+}
 
 export async function GET() {
   const session = await auth();
@@ -120,7 +172,9 @@ export async function GET() {
       }),
     );
 
-    return NextResponse.json({ posts: postsWithTitles });
+    const tree = buildTree(postsWithTitles);
+
+    return NextResponse.json({ tree, posts: postsWithTitles });
   } catch (error) {
     console.error("Error fetching posts:", error);
     return NextResponse.json(
