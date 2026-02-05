@@ -3,7 +3,7 @@
 import { useCheckRepo } from "@/app/hooks/useCheckRepo";
 import { useEnsureConfig } from "@/app/hooks/useEnsureConfig";
 import { Setup } from "./Setup";
-import { ManagePosts } from "./ManagePosts";
+import { ManageContent } from "./ManageContent";
 
 interface DashboardContentProps {
   username: string;
@@ -15,7 +15,7 @@ export function DashboardContent({ username }: DashboardContentProps) {
   useEnsureConfig();
 
   if (hasRepo === true) {
-    return <ManagePosts />;
+    return <ManageContent />;
   }
 
   return (

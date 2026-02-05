@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 const navItems = [
   {
-    name: "Posts",
+    name: "Manage Content",
     href: "/dashboard",
     icon: (
       <svg
