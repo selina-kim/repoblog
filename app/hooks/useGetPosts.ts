@@ -24,17 +24,34 @@ export function useGetPosts() {
         const response = await fetch("/api/posts");
 
         if (!response.ok) {
-          throw new Error("Failed to fetch posts");
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to fetch posts");
         }
 
         const data = await response.json();
+
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
         setPosts(data.posts || []);
         setTree(data.tree || []);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch posts");
-        setPosts([]);
-        setTree([]);
+        const errorMessage =
+          err instanceof Error ? err.message : "Failed to fetch posts";
+        if (
+          errorMessage.toLowerCase().includes("tree") ||
+          errorMessage.toLowerCase().includes("not found")
+        ) {
+          setError(null);
+          setPosts([]);
+          setTree([]);
+        } else {
+          setError(errorMessage);
+          setPosts([]);
+          setTree([]);
+        }
       } finally {
         setIsLoading(false);
       }

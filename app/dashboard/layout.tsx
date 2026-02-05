@@ -44,7 +44,9 @@ export default async function DashboardLayout({
           </div>
         </header>
 
-        <main className="flex-1 p-8">{children}</main>
+        <main className="flex h-full flex-col justify-start p-8">
+          {children}
+        </main>
       </div>
     </div>
   );

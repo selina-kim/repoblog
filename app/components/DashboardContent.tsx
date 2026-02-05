@@ -2,7 +2,7 @@
 
 import { useCheckRepo } from "@/app/hooks/useCheckRepo";
 import { useEnsureConfig } from "@/app/hooks/useEnsureConfig";
-import { Setup } from "./Setup";
+import { RepoCheck } from "./RepoCheck";
 import { ManageContent } from "./ManageContent";
 
 interface DashboardContentProps {
@@ -19,7 +19,7 @@ export function DashboardContent({ username }: DashboardContentProps) {
   }
 
   return (
-    <Setup
+    <RepoCheck
       error={error}
       hasRepo={hasRepo}
       isLoading={isLoading}

@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
-import { ENV } from "./env";
+import { ENV } from "@/env";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
