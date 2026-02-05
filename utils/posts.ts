@@ -1,5 +1,5 @@
 import { REPO_NAME } from "@/constants/github";
-import { env } from "@/env";
+import { ENV } from "@/env";
 import type { Post } from "@/types/blog";
 import {
   extractFrontmatter,
@@ -10,8 +10,8 @@ import {
 
 // build-time data fetching (no user auth, uses env token)
 export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
-  const token = env.GITHUB_TOKEN;
-  const owner = env.OWNER_GITHUB_USERNAME;
+  const token = ENV.GITHUB_TOKEN;
+  const owner = ENV.OWNER_GITHUB_USERNAME;
 
   if (!token || !owner) {
     throw new Error(
@@ -123,8 +123,8 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const token = env.GITHUB_TOKEN;
-  const owner = env.OWNER_GITHUB_USERNAME;
+  const token = ENV.GITHUB_TOKEN;
+  const owner = ENV.OWNER_GITHUB_USERNAME;
 
   if (!token || !owner) {
     throw new Error(

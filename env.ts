@@ -1,4 +1,4 @@
-export const env = {
+export const ENV = {
   NEXTAUTH_URL: process.env.NEXTAUTH_URL!,
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET!,
   AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID!,

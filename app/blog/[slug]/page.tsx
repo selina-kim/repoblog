@@ -80,7 +80,7 @@ export default async function BlogPostPage({
         </div>
 
         <div
-          className="mdx-content prose prose-gray max-w-none rounded-lg border border-gray-200 bg-white p-8"
+          className="mdx-content max-w-none rounded-lg border border-gray-200 bg-white p-8"
           style={styleVars}
         >
           <MDXRemote source={post.content} />
