@@ -7,6 +7,7 @@ import {
   extractTitleFromMDX,
   generateSlugFromFilename,
 } from "./mdx-utils";
+import { fetchWithRetry } from "./fetch-retry";
 
 // build-time data fetching (no user auth, uses env token)
 export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
@@ -21,15 +22,14 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
 
   try {
     // get repository info to find default branch
-    const repoResponse = await fetch(
-      `https://api.github.com/repos/${owner}/${REPO_NAME}`,
-      {
+    const repoResponse = await fetchWithRetry(() =>
+      fetch(`https://api.github.com/repos/${owner}/${REPO_NAME}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github+json",
         },
         next: { revalidate: 0 }, // don't cache at build time
-      },
+      }),
     );
 
     if (!repoResponse.ok) {
@@ -40,15 +40,17 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
     const defaultBranch = repoData.default_branch;
 
     // Fetch file tree
-    const treeResponse = await fetch(
-      `https://api.github.com/repos/${owner}/${REPO_NAME}/git/trees/${defaultBranch}?recursive=1`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/vnd.github+json",
+    const treeResponse = await fetchWithRetry(() =>
+      fetch(
+        `https://api.github.com/repos/${owner}/${REPO_NAME}/git/trees/${defaultBranch}?recursive=1`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github+json",
+          },
+          next: { revalidate: 0 },
         },
-        next: { revalidate: 0 },
-      },
+      ),
     );
 
     if (!treeResponse.ok) {
@@ -74,15 +76,17 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
         // fetch content for MDX files to extract metadata
         if (item.path.endsWith(".mdx")) {
           try {
-            const contentResponse = await fetch(
-              `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${item.path}?ref=${defaultBranch}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  Accept: "application/vnd.github+json",
+            const contentResponse = await fetchWithRetry(() =>
+              fetch(
+                `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${item.path}?ref=${defaultBranch}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/vnd.github+json",
+                  },
+                  next: { revalidate: 0 },
                 },
-                next: { revalidate: 0 },
-              },
+              ),
             );
 
             if (contentResponse.ok) {
@@ -141,15 +145,14 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     }
 
     // get repository info to find default branch
-    const repoResponse = await fetch(
-      `https://api.github.com/repos/${owner}/${REPO_NAME}`,
-      {
+    const repoResponse = await fetchWithRetry(() =>
+      fetch(`https://api.github.com/repos/${owner}/${REPO_NAME}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github+json",
         },
         next: { revalidate: 0 },
-      },
+      }),
     );
 
     if (!repoResponse.ok) {
@@ -160,15 +163,17 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const defaultBranch = repoData.default_branch;
 
     // fetch full content
-    const contentResponse = await fetch(
-      `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${post.path}?ref=${defaultBranch}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/vnd.github+json",
+    const contentResponse = await fetchWithRetry(() =>
+      fetch(
+        `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${post.path}?ref=${defaultBranch}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github+json",
+          },
+          next: { revalidate: 0 },
         },
-        next: { revalidate: 0 },
-      },
+      ),
     );
 
     if (!contentResponse.ok) {

@@ -3,6 +3,7 @@ import { ENV } from "@/env";
 import type { BlogConfig } from "@/types/blog";
 import { DEFAULT_BLOG_CONFIG } from "@/constants/default-blog-config";
 import yaml from "js-yaml";
+import { fetchWithRetry } from "./fetch-retry";
 
 export async function createDefaultConfigInRepo(
   accessToken: string,
@@ -90,15 +91,14 @@ export async function getBlogConfig(): Promise<BlogConfig> {
 
   try {
     // get repository info to find default branch
-    const repoResponse = await fetch(
-      `https://api.github.com/repos/${owner}/${REPO_NAME}`,
-      {
+    const repoResponse = await fetchWithRetry(() =>
+      fetch(`https://api.github.com/repos/${owner}/${REPO_NAME}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github+json",
         },
         next: { revalidate: 0 },
-      },
+      }),
     );
 
     if (!repoResponse.ok) {
@@ -110,15 +110,17 @@ export async function getBlogConfig(): Promise<BlogConfig> {
     const defaultBranch = repoData.default_branch;
 
     // fetch config from root of repo
-    const configResponse = await fetch(
-      `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${CONFIG_FILENAME}?ref=${defaultBranch}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/vnd.github+json",
+    const configResponse = await fetchWithRetry(() =>
+      fetch(
+        `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${CONFIG_FILENAME}?ref=${defaultBranch}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github+json",
+          },
+          next: { revalidate: 0 },
         },
-        next: { revalidate: 0 },
-      },
+      ),
     );
 
     if (!configResponse.ok) {
