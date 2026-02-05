@@ -58,6 +58,11 @@ export interface BlogConfig {
         numberColor: string;
         textColor: string;
       };
+      image: {
+        borderRadius: number;
+        shadow: string;
+        border: string;
+      };
     };
     headings: {
       h1: HeadingStyle;

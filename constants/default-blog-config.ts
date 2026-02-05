@@ -41,6 +41,12 @@ export const DEFAULT_BLOG_CONFIG: BlogConfig = {
         numberColor: "inherit",
         textColor: "inherit",
       },
+      image: {
+        borderRadius: 0.5,
+        shadow:
+          "0 4px 6px -1px rgb(0 0 0 / 0.15), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+        border: "",
+      },
     },
     headings: {
       h1: {

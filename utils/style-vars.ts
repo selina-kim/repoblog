@@ -86,7 +86,7 @@ export function generateStyleVars(config: BlogConfig): CSSProperties {
     "--blockquote-font-style": config.styles.typography.blockquote.italicize
       ? "italic"
       : "normal",
-    // // Table
+    // // TODO: Table
     // "--table-border-color": config.styles.typography.table.borderColor,
     // "--table-header-bg": config.styles.typography.table.headerBg,
     // "--table-header-color": config.styles.typography.table.headerColor,
@@ -135,5 +135,9 @@ export function generateStyleVars(config: BlogConfig): CSSProperties {
     "--h6-weight": config.styles.headings.h6.weight,
     "--h6-line-height": config.styles.headings.h6.lineHeight,
     "--h6-font-family": config.styles.headings.h6.fontFamily || "inherit",
+    // Image
+    "--image-border-radius": `${config.styles.typography.image.borderRadius}rem`,
+    "--image-box-shadow": config.styles.typography.image.shadow || "none",
+    "--image-border": config.styles.typography.image.border || "none",
   } as CSSProperties;
 }
