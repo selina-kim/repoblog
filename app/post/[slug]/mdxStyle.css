@@ -4,8 +4,8 @@
   --text-color: #374151;
   --link-color: #2563eb;
   --link-hover-color: #1d4ed8;
-  --code-bg: #f3f4f6;
-  --code-color: #e11d48;
+  --bold-color: #1f2937;
+  --italic-color: #374151;
 
   /* Font Sizes (rem) */
   --text-size: 1rem;
@@ -18,10 +18,43 @@
   --heading-margin-top: 2rem;
   --heading-margin-bottom: 1rem;
   --list-margin: 1.25rem;
+  --list-item-spacing: 0.5rem;
 
   /* Font Weights */
   --text-weight: 400;
   --bold-weight: 600;
+
+  /* Inline Code */
+  --inline-code-bg: #f3f4f6;
+  --inline-code-color: #e11d48;
+  --inline-code-font-size: 0.875em;
+
+  /* Code Block */
+  --code-block-bg: #1f2937;
+  --code-block-text-color: #f3f4f6;
+  --code-block-border-radius: 0.5rem;
+
+  /* Blockquote */
+  --blockquote-border-color: #2563eb;
+  --blockquote-text-color: #4b5563;
+  --blockquote-bg-color: transparent;
+  --blockquote-font-style: italic;
+
+  /* Table */
+  --table-border-color: #e5e7eb;
+  --table-header-bg: #f3f4f6;
+  --table-header-color: #1f2937;
+  --table-cell-padding: 0.75rem;
+
+  /* Horizontal Rule */
+  --hr-color: #e5e7eb;
+  --hr-height: 1px;
+  --hr-margin: 2rem;
+
+  /* List */
+  --list-bullet-color: #6b7280;
+  --list-number-color: #6b7280;
+  --list-text-color: #374151;
 
   /* H1 Styles */
   --h1-color: #1f2937;
@@ -150,35 +183,59 @@
 .mdx-content ol {
   margin-bottom: var(--list-margin);
   padding-left: 1.5rem;
-  color: var(--text-color);
+  color: var(--list-text-color);
+}
+
+/* Bullet points */
+.mdx-content ul {
+  list-style: disc;
+}
+
+.mdx-content ol {
+  list-style: decimal;
+}
+
+.mdx-content ul li::marker {
+  color: var(--list-bullet-color);
+}
+
+.mdx-content ol li::marker {
+  color: var(--list-number-color);
 }
 
 .mdx-content li {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--list-item-spacing);
   line-height: var(--line-height);
+  color: var(--list-text-color);
 }
 
 /* Strong/Bold */
 .mdx-content strong {
   font-weight: var(--bold-weight);
-  color: var(--heading-color);
+  color: var(--bold-color);
+}
+
+/* Italic/Emphasis */
+.mdx-content em {
+  font-style: italic;
+  color: var(--italic-color);
 }
 
 /* Inline Code */
 .mdx-content code {
-  background-color: var(--code-bg);
-  color: var(--code-color);
+  background-color: var(--inline-code-bg);
+  color: var(--inline-code-color);
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
-  font-size: 0.875em;
+  font-size: var(--inline-code-font-size);
   font-family: ui-monospace, monospace;
 }
 
 /* Code Blocks */
 .mdx-content pre {
-  background-color: var(--code-bg);
+  background-color: var(--code-block-bg);
   padding: 1rem;
-  border-radius: 0.5rem;
+  border-radius: var(--code-block-border-radius);
   overflow-x: auto;
   margin-bottom: var(--paragraph-margin);
 }
@@ -186,23 +243,24 @@
 .mdx-content pre code {
   background-color: transparent;
   padding: 0;
-  color: var(--text-color);
+  color: var(--code-block-text-color);
 }
 
 /* Blockquotes */
 .mdx-content blockquote {
-  border-left: 4px solid var(--link-color);
+  border-left: 4px solid var(--blockquote-border-color);
   padding-left: 1rem;
   margin: var(--paragraph-margin) 0;
-  color: var(--text-color);
-  font-style: italic;
+  color: var(--blockquote-text-color);
+  background-color: var(--blockquote-bg-color);
+  font-style: var(--blockquote-font-style);
 }
 
 /* Horizontal Rule */
 .mdx-content hr {
   border: none;
-  border-top: 1px solid #e5e7eb;
-  margin: 2rem 0;
+  border-top: var(--hr-height) solid var(--hr-color);
+  margin: var(--hr-margin) 0;
 }
 
 /* Images */
@@ -222,13 +280,13 @@
 
 .mdx-content th,
 .mdx-content td {
-  border: 1px solid #e5e7eb;
-  padding: 0.5rem;
+  border: 1px solid var(--table-border-color);
+  padding: var(--table-cell-padding);
   text-align: left;
 }
 
 .mdx-content th {
-  background-color: var(--code-bg);
+  background-color: var(--table-header-bg);
   font-weight: var(--bold-weight);
-  color: var(--heading-color);
+  color: var(--table-header-color);
 }

@@ -3,11 +3,44 @@ import type { BlogConfig } from "@/types/blog";
 export const DEFAULT_BLOG_CONFIG: BlogConfig = {
   styles: {
     typography: {
-      textColor: "#374151",
-      linkColor: "#2563eb",
+      textColor: "#1f2937",
+      linkColor: "inherit",
       linkHoverColor: "#1d4ed8",
-      codeBg: "#f3f4f6",
-      codeColor: "#e11d48",
+      boldColor: "inherit",
+      italicColor: "inherit",
+      inlineCode: {
+        bg: "#f3f4f6",
+        color: "#e11d48",
+        fontSize: 0.875,
+      },
+      codeBlock: {
+        bg: "#f3f4f6",
+        textColor: "#1f2937",
+        borderRadius: 0.5,
+      },
+      blockquote: {
+        borderColor: "#2563eb",
+        textColor: "#4b5563",
+        bgColor: "transparent",
+        italicize: true,
+      },
+      // TODO: implement mdx table rendering
+      // table: {
+      //   borderColor: "#e5e7eb",
+      //   headerBg: "#f3f4f6",
+      //   headerColor: "#1f2937",
+      //   cellPadding: 0.75,
+      // },
+      horizontalRule: {
+        color: "#e5e7eb",
+        height: 1,
+        margin: 2,
+      },
+      list: {
+        bulletColor: "inherit",
+        numberColor: "inherit",
+        textColor: "inherit",
+      },
     },
     headings: {
       h1: {
@@ -60,10 +93,7 @@ export const DEFAULT_BLOG_CONFIG: BlogConfig = {
       lineHeight: 1.7,
     },
     spacing: {
-      paragraphMargin: 1.25,
-      headingMarginTop: 2,
-      headingMarginBottom: 1,
-      listMargin: 1.25,
+      preset: "normal",
     },
     fontWeights: {
       textWeight: 400,

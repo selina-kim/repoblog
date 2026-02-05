@@ -16,14 +16,48 @@ export interface HeadingStyle {
   fontFamily?: string;
 }
 
+export type SpacingPreset = "tighter" | "tight" | "normal" | "loose" | "looser";
+
 export interface BlogConfig {
   styles: {
     typography: {
       textColor: string;
       linkColor: string;
       linkHoverColor: string;
-      codeBg: string;
-      codeColor: string;
+      boldColor: string;
+      italicColor: string;
+      inlineCode: {
+        bg: string;
+        color: string;
+        fontSize: number;
+      };
+      codeBlock: {
+        bg: string;
+        textColor: string;
+        borderRadius: number;
+      };
+      blockquote: {
+        borderColor: string;
+        textColor: string;
+        bgColor: string;
+        italicize: boolean;
+      };
+      // table: {
+      //   borderColor: string;
+      //   headerBg: string;
+      //   headerColor: string;
+      //   cellPadding: number;
+      // };
+      horizontalRule: {
+        color: string;
+        height: number;
+        margin: number;
+      };
+      list: {
+        bulletColor: string;
+        numberColor: string;
+        textColor: string;
+      };
     };
     headings: {
       h1: HeadingStyle;
@@ -40,10 +74,7 @@ export interface BlogConfig {
       lineHeight: number;
     };
     spacing: {
-      paragraphMargin: number;
-      headingMarginTop: number;
-      headingMarginBottom: number;
-      listMargin: number;
+      preset: SpacingPreset;
     };
     fontWeights: {
       textWeight: number;
