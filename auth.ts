@@ -56,7 +56,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     authorized: async ({ auth, request: { nextUrl } }) => {
       const isLoggedIn = !!auth?.user;
       const isPublicRoute =
-        nextUrl.pathname === "/" || nextUrl.pathname === "/login";
+        nextUrl.pathname === "/" ||
+        nextUrl.pathname === "/login" ||
+        nextUrl.pathname.startsWith("/post");
 
       if (isPublicRoute) {
         return true;

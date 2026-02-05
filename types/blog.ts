@@ -8,28 +8,36 @@ export interface Post {
   metadata?: Record<string, string>;
 }
 
+export interface HeadingStyle {
+  color: string;
+  size: number;
+  weight: number;
+  lineHeight: number;
+  fontFamily?: string;
+}
+
 export interface BlogConfig {
   styles: {
     typography: {
-      headingColor: string;
       textColor: string;
       linkColor: string;
       linkHoverColor: string;
       codeBg: string;
       codeColor: string;
     };
+    headings: {
+      h1: HeadingStyle;
+      h2: HeadingStyle;
+      h3: HeadingStyle;
+      h4: HeadingStyle;
+      h5: HeadingStyle;
+      h6: HeadingStyle;
+    };
     fontSizes: {
       textSize: number;
-      h1Size: number;
-      h2Size: number;
-      h3Size: number;
-      h4Size: number;
-      h5Size: number;
-      h6Size: number;
     };
     lineHeights: {
       lineHeight: number;
-      headingLineHeight: number;
     };
     spacing: {
       paragraphMargin: number;
@@ -38,7 +46,6 @@ export interface BlogConfig {
       listMargin: number;
     };
     fontWeights: {
-      headingWeight: number;
       textWeight: number;
       boldWeight: number;
     };

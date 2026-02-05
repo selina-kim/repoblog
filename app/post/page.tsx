@@ -21,7 +21,7 @@ export default async function HomePage() {
             {posts.map((post) => (
               <Link
                 className="block rounded-lg border border-gray-200 bg-white p-6 transition-colors hover:bg-gray-50"
-                href={`/${post.slug}`}
+                href={`/post/${post.slug}`}
                 key={post.slug}
               >
                 <h2 className="mb-2 text-2xl font-semibold text-gray-900">
