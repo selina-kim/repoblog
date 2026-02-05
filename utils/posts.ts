@@ -28,7 +28,6 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
           Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github+json",
         },
-        next: { revalidate: 0 }, // don't cache at build time
       }),
     );
 
@@ -48,7 +47,6 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
             Authorization: `Bearer ${token}`,
             Accept: "application/vnd.github+json",
           },
-          next: { revalidate: 0 },
         },
       ),
     );
@@ -84,7 +82,6 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
                     Authorization: `Bearer ${token}`,
                     Accept: "application/vnd.github+json",
                   },
-                  next: { revalidate: 0 },
                 },
               ),
             );
@@ -151,7 +148,6 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
           Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github+json",
         },
-        next: { revalidate: 0 },
       }),
     );
 
@@ -171,7 +167,6 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
             Authorization: `Bearer ${token}`,
             Accept: "application/vnd.github+json",
           },
-          next: { revalidate: 0 },
         },
       ),
     );

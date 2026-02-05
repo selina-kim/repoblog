@@ -8,6 +8,8 @@ import {
   generateSlugFromFilename,
 } from "@/utils/mdx-utils";
 
+export const revalidate = 60;
+
 function buildTree(
   items: {
     path: string;
