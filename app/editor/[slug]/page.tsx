@@ -1,38 +1,52 @@
-import { notFound } from "next/navigation";
-import { getAllPosts, getPostBySlug } from "@/utils/posts";
+import Tiptap from "@/app/components/Tiptap";
+import { auth } from "@/auth";
 import { getBlogConfig } from "@/utils/blog-config";
 import { generateStyleVars } from "@/utils/style-vars";
-import { MDXRemote } from "next-mdx-remote-client/rsc";
+import { notFound, redirect } from "next/navigation";
+import "./editorStyle.css";
+import { getPostBySlug } from "@/utils/posts";
 import { ENV } from "@/env";
-import "./mdxStyle.css";
 
-export async function generateStaticParams() {
-  const posts = await getAllPosts();
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
-}
-
-export default async function BlogPostPage({
+export default async function EditorPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
-  const [post, config] = await Promise.all([
-    getPostBySlug(slug),
-    getBlogConfig(),
-  ]);
+  const session = await auth();
 
-  if (!post) {
-    notFound();
+  if (!session?.user) {
+    redirect("/login");
   }
 
-  const styleVars = generateStyleVars(config);
   const author = ENV.OWNER_DISPLAY_NAME;
+  const { slug } = await params;
+  const isNewDraft = slug === "draft";
 
+  const config = await getBlogConfig();
+  const styleVars = generateStyleVars(config);
+
+  const post = {
+    title: "Untitled",
+    metadata: {
+      title: "Untitled",
+      date: "",
+      description: "",
+    },
+  };
+
+  if (!isNewDraft) {
+    const existingPost = await getPostBySlug(slug);
+    if (!existingPost) {
+      notFound();
+    }
+  }
   return (
     <div className="min-h-screen bg-gray-50 py-12">
+      <div className="mx-auto mb-6 max-w-3xl px-4">
+        <div className="rounded bg-yellow-200 px-4 py-2 text-center font-mono text-xs font-semibold text-yellow-800">
+          Editor Mode
+        </div>
+      </div>
       <article className="mx-auto max-w-3xl px-4">
         <div className="mb-8">
           <h1 className="mb-4 text-4xl font-bold text-gray-900">
@@ -54,13 +68,7 @@ export default async function BlogPostPage({
             </p>
           )}
         </div>
-
-        <div
-          className="mdx-content rounded-lg border border-gray-200 bg-white p-8"
-          style={styleVars}
-        >
-          <MDXRemote source={post.content} />
-        </div>
+        <Tiptap style={styleVars} />
       </article>
     </div>
   );

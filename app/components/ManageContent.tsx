@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useGetPosts } from "../hooks/useGetPosts";
 import { FileTree } from "./FileTree";
 import { Loader } from "./Loader";
+import { EditorTrigger } from "./EditorTrigger";
 
 export function ManageContent() {
   const { tree, isLoading, error } = useGetPosts();
@@ -37,12 +37,7 @@ export function ManageContent() {
       </div>
 
       <div className="flex justify-end">
-        <Link
-          className="bg-main-accent inline-flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
-          href="/dashboard/editor"
-        >
-          + Create New Post
-        </Link>
+        <EditorTrigger />
       </div>
     </div>
   );

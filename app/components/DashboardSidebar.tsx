@@ -6,7 +6,6 @@ import type { Session } from "next-auth";
 import { FileIcon } from "@/assets/icons/FileIcon";
 import { PaletteIcon } from "@/assets/icons/PaletteIcon";
 import { handleSignOut } from "../actions/auth";
-import { ENV } from "@/env";
 
 const navItems = [
   {
