@@ -24,7 +24,7 @@ export function Setup({ refresh }: SetupProps) {
         to start managing your blog posts.
       </p>
       <Link
-        className="mb-4 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+        className="bg-main-accent mb-4 inline-flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
         href={CREATE_REPO_URL}
         rel="noopener noreferrer"
         target="_blank"

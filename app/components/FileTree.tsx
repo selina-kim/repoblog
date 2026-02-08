@@ -49,7 +49,7 @@ function FileTreeNode({ node, level = 0, isLast = false }: FileTreeNodeProps) {
               <ChevronIcon
                 className={`h-4 w-4 shrink-0 text-gray-500 transition-transform ${isOpen ? "rotate-90" : ""}`}
               />
-              <FolderIcon className="h-4 w-4 shrink-0 text-blue-500" />
+              <FolderIcon className="text-main-accent h-4 w-4 shrink-0" />
               <span className="truncate">{node.name}</span>
             </button>
             {isOpen && node.children && (

@@ -18,7 +18,7 @@ export function RepoCheck({
   if (isLoading) {
     return (
       <div className="flex items-center justify-start gap-2 text-gray-600">
-        <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+        <div className="border-main-accent h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
         Checking for repository...
       </div>
     );

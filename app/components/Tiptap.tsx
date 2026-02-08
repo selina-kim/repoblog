@@ -14,7 +14,7 @@ const Tiptap = ({ style }: { style: CSSProperties }) => {
     editorProps: {
       attributes: {
         class:
-          "rounded-lg border border-gray-200 bg-white p-6 focus:outline-blue-600",
+          "rounded-lg border border-gray-200 bg-white p-6 focus:outline-main-accent",
       },
     },
   });
