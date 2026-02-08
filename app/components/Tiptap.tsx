@@ -2,16 +2,24 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { CSSProperties } from "react";
 
-const Tiptap = () => {
+const Tiptap = ({ style }: { style: CSSProperties }) => {
   const editor = useEditor({
-    extensions: [StarterKit],
-    content: "<p>Hello World! 🌎️</p>",
+    extensions: [StarterKit.configure()],
+    content: "<b>Hello World! 🌎️</b>",
     // Don't render immediately on the server to avoid SSR issues
     immediatelyRender: false,
+    editable: true,
+    editorProps: {
+      attributes: {
+        class:
+          "rounded-lg border border-gray-200 bg-white p-6 focus:outline-blue-600",
+      },
+    },
   });
 
-  return <EditorContent editor={editor} />;
+  return <EditorContent editor={editor} style={style} />;
 };
 
 export default Tiptap;

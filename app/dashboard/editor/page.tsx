@@ -1,8 +1,15 @@
+import Tiptap from "@/app/components/Tiptap";
 import { auth } from "@/auth";
+import { getBlogConfig } from "@/utils/blog-config";
+import { generateStyleVars } from "@/utils/style-vars";
 import { redirect } from "next/navigation";
+import "./editorStyle.css";
 
 export default async function EditorPage() {
   const session = await auth();
+
+  const config = await getBlogConfig();
+  const styleVars = generateStyleVars(config);
 
   if (!session?.user) {
     redirect("/login");
@@ -16,10 +23,7 @@ export default async function EditorPage() {
           Write and publish your blog post
         </p>
       </div>
-
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <p className="text-gray-600">Editor coming soon...</p>
-      </div>
+      <Tiptap style={styleVars} />
     </div>
   );
 }
