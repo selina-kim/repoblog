@@ -1,9 +1,0 @@
-export const ENV = {
-  NEXTAUTH_URL: process.env.NEXTAUTH_URL!,
-  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET!,
-  AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID!,
-  AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET!,
-  OWNER_DISPLAY_NAME: process.env.OWNER_DISPLAY_NAME!,
-  OWNER_GITHUB_USERNAME: process.env.OWNER_GITHUB_USERNAME!,
-  GITHUB_TOKEN: process.env.GITHUB_TOKEN!,
-} as const;

@@ -1,12 +1,11 @@
 import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
-import { ENV } from "@/env";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     GitHubProvider({
-      clientId: ENV.AUTH_GITHUB_ID,
-      clientSecret: ENV.AUTH_GITHUB_SECRET,
+      clientId: process.env.AUTH_GITHUB_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET,
       authorization: {
         params: {
           scope: "read:user user:email public_repo",
@@ -42,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
     async signIn({ profile }) {
-      const allowedGithubUsername = ENV.OWNER_GITHUB_USERNAME;
+      const allowedGithubUsername = process.env.OWNER_GITHUB_USERNAME;
 
       const isAllowed =
         allowedGithubUsername && profile?.login === allowedGithubUsername;
