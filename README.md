@@ -30,4 +30,6 @@ npm i
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+3. Go to [http://localhost:3000/signin](http://localhost:3000/signin) to sign in with your Github Account and set up the blog.
