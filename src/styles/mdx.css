@@ -1,6 +1,8 @@
 /* MDX Content Styling with CSS Variables */
 /* Variables are set dynamically via inline styles from TypeScript config */
 
+@import "highlight.js/styles/github.css";
+
 /* Paragraphs */
 .mdx-content p {
   color: var(--text-color);
