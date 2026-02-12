@@ -2,11 +2,11 @@
 
 ### TODO
 
+- [x] change slug logic
+- [x] refine `Post` type definition
+- [x] refactor potentially redundant code between the rendering of post (visitor view) and the editor mode of post
 - [ ] implement the Appearances tab on dashboard
-- [ ] change slug logic
-- [ ] refine `Post` type definition
 - [ ] currently only has WYSIWYG editor, add a toggle for an editor mode that shows raw code with separate preview
-- [ ] refactor potentially redundant code between the rendering of post (visitor view) and the editor mode of post
 - [ ] might be better to store owner display name in the `config.yaml`?
 
 ### Setup & Installation
