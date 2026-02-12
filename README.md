@@ -8,6 +8,7 @@
 - [ ] implement the Appearances tab on dashboard
 - [ ] currently only has WYSIWYG editor, add a toggle for an editor mode that shows raw code with separate preview
 - [ ] might be better to store owner display name in the `config.yaml`?
+- [ ] pagination for pulling repo data?
 
 ### Setup & Installation
 
