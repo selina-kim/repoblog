@@ -3,6 +3,7 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { CSSProperties } from "react";
+import "@/styles/mdx.css";
 
 const Tiptap = ({ style }: { style: CSSProperties }) => {
   const editor = useEditor({
@@ -14,7 +15,7 @@ const Tiptap = ({ style }: { style: CSSProperties }) => {
     editorProps: {
       attributes: {
         class:
-          "rounded-lg border border-gray-200 bg-white p-8 focus:outline-main-accent",
+          "mdx-content rounded-lg border border-gray-200 bg-white p-8 focus:outline-main-accent",
       },
     },
     autofocus: true,

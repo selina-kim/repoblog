@@ -4,7 +4,6 @@ import { getBlogConfig } from "@/utils/blog-config";
 import { generateStyleVars } from "@/utils/style-vars";
 import { notFound, redirect } from "next/navigation";
 import { getPostBySlug } from "@/utils/posts";
-import "@/styles/mdx.css";
 
 export default async function EditorPage({
   params,

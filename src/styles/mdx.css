@@ -2,7 +2,7 @@
 /* Variables are set dynamically via inline styles from TypeScript config */
 
 /* Paragraphs */
-p {
+.mdx-content p {
   color: var(--text-color);
   font-size: var(--text-size);
   line-height: var(--line-height);
@@ -11,17 +11,17 @@ p {
 }
 
 /* Headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.mdx-content h1,
+.mdx-content h2,
+.mdx-content h3,
+.mdx-content h4,
+.mdx-content h5,
+.mdx-content h6 {
   margin-top: var(--heading-margin-top);
   margin-bottom: var(--heading-margin-bottom);
 }
 
-h1 {
+.mdx-content h1 {
   color: var(--h1-color);
   font-size: var(--h1-size);
   font-weight: var(--h1-weight);
@@ -29,7 +29,7 @@ h1 {
   font-family: var(--h1-font-family);
 }
 
-h2 {
+.mdx-content h2 {
   color: var(--h2-color);
   font-size: var(--h2-size);
   font-weight: var(--h2-weight);
@@ -37,7 +37,7 @@ h2 {
   font-family: var(--h2-font-family);
 }
 
-h3 {
+.mdx-content h3 {
   color: var(--h3-color);
   font-size: var(--h3-size);
   font-weight: var(--h3-weight);
@@ -45,7 +45,7 @@ h3 {
   font-family: var(--h3-font-family);
 }
 
-h4 {
+.mdx-content h4 {
   color: var(--h4-color);
   font-size: var(--h4-size);
   font-weight: var(--h4-weight);
@@ -53,7 +53,7 @@ h4 {
   font-family: var(--h4-font-family);
 }
 
-h5 {
+.mdx-content h5 {
   color: var(--h5-color);
   font-size: var(--h5-size);
   font-weight: var(--h5-weight);
@@ -61,7 +61,7 @@ h5 {
   font-family: var(--h5-font-family);
 }
 
-h6 {
+.mdx-content h6 {
   color: var(--h6-color);
   font-size: var(--h6-size);
   font-weight: var(--h6-weight);
@@ -70,61 +70,61 @@ h6 {
 }
 
 /* Links */
-a {
+.mdx-content a {
   color: var(--link-color);
   text-decoration: underline;
   transition: color 0.2s;
 }
 
-a:hover {
+.mdx-content a:hover {
   color: var(--link-hover-color);
 }
 
 /* Lists */
-ul,
-ol {
+.mdx-content ul,
+.mdx-content ol {
   margin-bottom: var(--list-margin);
   padding-left: 1.5rem;
   color: var(--list-text-color);
 }
 
 /* Bullet points */
-ul {
+.mdx-content ul {
   list-style: disc;
 }
 
-ol {
+.mdx-content ol {
   list-style: decimal;
 }
 
-ul li::marker {
+.mdx-content ul li::marker {
   color: var(--list-bullet-color);
 }
 
-ol li::marker {
+.mdx-content ol li::marker {
   color: var(--list-number-color);
 }
 
-li {
+.mdx-content li {
   margin-bottom: var(--list-item-spacing);
   line-height: var(--line-height);
   color: var(--list-text-color);
 }
 
 /* Strong/Bold */
-strong {
+.mdx-content strong {
   font-weight: var(--bold-weight);
   color: var(--bold-color);
 }
 
 /* Italic/Emphasis */
-em {
+.mdx-content em {
   font-style: italic;
   color: var(--italic-color);
 }
 
 /* Inline Code */
-code {
+.mdx-content code {
   background-color: var(--inline-code-bg);
   color: var(--inline-code-color);
   padding: 0.2rem 0.4rem;
@@ -134,7 +134,7 @@ code {
 }
 
 /* Code Blocks */
-pre {
+.mdx-content pre {
   background-color: var(--code-block-bg);
   padding: 1rem;
   border-radius: var(--code-block-border-radius);
@@ -142,14 +142,14 @@ pre {
   margin-bottom: var(--paragraph-margin);
 }
 
-pre code {
+.mdx-content pre code {
   background-color: transparent;
   padding: 0;
   color: var(--code-block-text-color);
 }
 
 /* Blockquotes */
-blockquote {
+.mdx-content blockquote {
   border-left: 4px solid var(--blockquote-border-color);
   padding-left: 1rem;
   margin: var(--paragraph-margin) 0;
@@ -159,14 +159,14 @@ blockquote {
 }
 
 /* Horizontal Rule */
-hr {
+.mdx-content hr {
   border: none;
   border-top: var(--hr-height) solid var(--hr-color);
   margin: var(--hr-margin) 0;
 }
 
 /* Images */
-img {
+.mdx-content img {
   height: auto;
   border-radius: var(--image-border-radius);
   margin: var(--paragraph-margin) 0;
@@ -175,20 +175,20 @@ img {
 }
 
 /* Tables */
-table {
+.mdx-content table {
   width: 100%;
   border-collapse: collapse;
   margin: var(--paragraph-margin) 0;
 }
 
-th,
-td {
+.mdx-content th,
+.mdx-content td {
   border: 1px solid var(--table-border-color);
   padding: var(--table-cell-padding);
   text-align: left;
 }
 
-th {
+.mdx-content th {
   background-color: var(--table-header-bg);
   font-weight: var(--bold-weight);
   color: var(--table-header-color);
