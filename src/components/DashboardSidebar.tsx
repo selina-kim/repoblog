@@ -9,7 +9,7 @@ import { handleSignOut } from "../app/actions/auth";
 
 const navItems = [
   {
-    name: "Manage Content",
+    name: "Manage Posts",
     href: "/dashboard",
     icon: <FileIcon className="h-5 w-5" />,
   },
