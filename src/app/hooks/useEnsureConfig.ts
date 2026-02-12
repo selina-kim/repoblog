@@ -9,6 +9,7 @@ export function useEnsureConfig() {
   useEffect(() => {
     async function checkAndCreateConfig() {
       try {
+        setIsChecking(true);
         const response = await fetch("/api/create-config", {
           method: "POST",
         });

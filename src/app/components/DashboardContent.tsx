@@ -2,7 +2,7 @@
 
 import { useCheckRepo } from "@/src/app/hooks/useCheckRepo";
 import { RepoCheck } from "./RepoCheck";
-import { ManageContent } from "./ManageContent";
+import { ManagePosts } from "./ManagePosts";
 
 interface DashboardContentProps {
   username: string;
@@ -12,7 +12,7 @@ export function DashboardContent({ username }: DashboardContentProps) {
   const { hasRepo, isLoading, error, refresh } = useCheckRepo(username);
 
   if (hasRepo === true) {
-    return <ManageContent />;
+    return <ManagePosts />;
   }
 
   return (
