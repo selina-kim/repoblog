@@ -13,7 +13,7 @@ export default async function EditorPage({
   const session = await auth();
 
   if (!session?.user) {
-    redirect("/login");
+    redirect("/signin");
   }
 
   const author = process.env.OWNER_DISPLAY_NAME;

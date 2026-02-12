@@ -1,11 +1,11 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
-export default async function StylingPage() {
+export default async function AppearancePage() {
   const session = await auth();
 
   if (!session?.user) {
-    redirect("/login");
+    redirect("/signin");
   }
 
   return (

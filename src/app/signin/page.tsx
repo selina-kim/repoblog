@@ -2,7 +2,7 @@ import { auth, signIn } from "@/auth";
 import { redirect } from "next/navigation";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
-export default async function LoginPage() {
+export default async function SignInPage() {
   const session = await auth();
 
   if (session?.user) {

@@ -56,7 +56,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isLoggedIn = !!auth?.user;
       const isPublicRoute =
         nextUrl.pathname === "/" ||
-        nextUrl.pathname === "/login" ||
+        nextUrl.pathname === "/signin" ||
         nextUrl.pathname.startsWith("/post") ||
         nextUrl.pathname.startsWith("/images") ||
         nextUrl.pathname.startsWith("/api/images");
@@ -66,7 +66,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       if (!isLoggedIn) {
-        return Response.redirect(new URL("/login", nextUrl));
+        return Response.redirect(new URL("/signin", nextUrl));
       }
 
       return true;
