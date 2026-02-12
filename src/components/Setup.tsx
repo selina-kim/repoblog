@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { GitHubIcon } from "@/src/assets/icons/GitHubIcon";
+import { GitHubIcon } from "@/assets/icons/GitHubIcon";
 
 interface SetupProps {
   refresh: () => void;

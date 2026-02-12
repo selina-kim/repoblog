@@ -1,5 +1,5 @@
-import { DashboardSidebar } from "@/src/app/components/DashboardSidebar";
-import { auth } from "@/src/auth";
+import { DashboardSidebar } from "@/components/DashboardSidebar";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({

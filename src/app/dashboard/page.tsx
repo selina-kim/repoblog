@@ -1,5 +1,5 @@
-import { auth } from "@/src/auth";
-import { DashboardContent } from "@/src/app/components/DashboardContent";
+import { auth } from "@/auth";
+import { DashboardContent } from "@/components/DashboardContent";
 
 export default async function DashboardPage() {
   const session = await auth();

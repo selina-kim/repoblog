@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import type { TreeNode } from "@/src/types/blog";
+import type { TreeNode } from "@/types/blog";
 import Link from "next/link";
-import { ChevronIcon } from "@/src/assets/icons/ChevronIcon";
-import { FileIcon } from "@/src/assets/icons/FileIcon";
-import { FolderIcon } from "@/src/assets/icons/FolderIcon";
+import { ChevronIcon } from "@/assets/icons/ChevronIcon";
+import { FileIcon } from "@/assets/icons/FileIcon";
+import { FolderIcon } from "@/assets/icons/FolderIcon";
 
 interface FileTreeProps {
   nodes: TreeNode[];

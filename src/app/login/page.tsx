@@ -1,6 +1,6 @@
-import { auth, signIn } from "@/src/auth";
+import { auth, signIn } from "@/auth";
 import { redirect } from "next/navigation";
-import { AnimatedBackground } from "@/src/app/components/AnimatedBackground";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 export default async function LoginPage() {
   const session = await auth();

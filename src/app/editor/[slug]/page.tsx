@@ -1,10 +1,10 @@
-import Tiptap from "@/src/app/components/Tiptap";
-import { auth } from "@/src/auth";
-import { getBlogConfig } from "@/src/utils/blog-config";
-import { generateStyleVars } from "@/src/utils/style-vars";
+import Tiptap from "@/components/Tiptap";
+import { auth } from "@/auth";
+import { getBlogConfig } from "@/utils/blog-config";
+import { generateStyleVars } from "@/utils/style-vars";
 import { notFound, redirect } from "next/navigation";
-import "./editorStyle.css";
-import { getPostBySlug } from "@/src/utils/posts";
+import { getPostBySlug } from "@/utils/posts";
+import "@/styles/mdx.css";
 
 export default async function EditorPage({
   params,

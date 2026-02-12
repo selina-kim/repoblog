@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
-import { getAllPosts, getPostBySlug } from "@/src/utils/posts";
-import { getBlogConfig } from "@/src/utils/blog-config";
-import { generateStyleVars } from "@/src/utils/style-vars";
+import { getAllPosts, getPostBySlug } from "@/utils/posts";
+import { getBlogConfig } from "@/utils/blog-config";
+import { generateStyleVars } from "@/utils/style-vars";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
-import "./mdxStyle.css";
+import "@/styles/mdx.css";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();

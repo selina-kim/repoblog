@@ -1,6 +1,6 @@
 "use client";
 
-import { useCheckRepo } from "@/src/app/hooks/useCheckRepo";
+import { useCheckRepo } from "@/hooks/useCheckRepo";
 import { RepoCheck } from "./RepoCheck";
 import { ManagePosts } from "./ManagePosts";
 

@@ -1,6 +1,6 @@
-import { CONFIG_FILENAME, REPO_NAME } from "@/src/constants/github";
-import type { BlogConfig } from "@/src/types/blog";
-import { DEFAULT_BLOG_CONFIG } from "@/src/constants/default-blog-config";
+import { CONFIG_FILENAME, REPO_NAME } from "@/constants/github";
+import type { BlogConfig } from "@/types/blog";
+import { DEFAULT_BLOG_CONFIG } from "@/constants/default-blog-config";
 import yaml from "js-yaml";
 import { fetchWithRetry } from "./fetch-retry";
 

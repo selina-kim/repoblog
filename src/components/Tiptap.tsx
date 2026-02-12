@@ -7,7 +7,7 @@ import { CSSProperties } from "react";
 const Tiptap = ({ style }: { style: CSSProperties }) => {
   const editor = useEditor({
     extensions: [StarterKit.configure()],
-    content: "<b>Hello World! 🌎️</b>",
+    content: "",
     // Don't render immediately on the server to avoid SSR issues
     immediatelyRender: false,
     editable: true,
@@ -17,6 +17,7 @@ const Tiptap = ({ style }: { style: CSSProperties }) => {
           "rounded-lg border border-gray-200 bg-white p-8 focus:outline-main-accent",
       },
     },
+    autofocus: true,
   });
 
   return <EditorContent editor={editor} style={style} />;

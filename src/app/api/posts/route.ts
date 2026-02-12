@@ -1,12 +1,12 @@
-import { auth } from "@/src/auth";
-import { REPO_NAME } from "@/src/constants/github";
+import { auth } from "@/auth";
+import { REPO_NAME } from "@/constants/github";
 import { NextResponse } from "next/server";
-import type { TreeNode } from "@/src/types/blog";
+import type { TreeNode } from "@/types/blog";
 import {
   extractSlugFromMDX,
   extractTitleFromMDX,
   generateSlugFromFilename,
-} from "@/src/utils/mdx-utils";
+} from "@/utils/mdx-utils";
 
 export const revalidate = 60;
 

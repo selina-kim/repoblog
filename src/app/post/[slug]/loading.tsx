@@ -1,4 +1,4 @@
-import { Loader } from "@/src/app/components/Loader";
+import { Loader } from "@/components/Loader";
 
 export default function Loading() {
   const titleSkeleton = (

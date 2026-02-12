@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { TreeNode } from "@/src/types/blog";
+import type { TreeNode } from "@/types/blog";
 
 interface Post {
   path: string;

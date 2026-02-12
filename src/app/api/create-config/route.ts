@@ -1,7 +1,7 @@
-import { auth } from "@/src/auth";
+import { auth } from "@/auth";
 import { NextResponse } from "next/server";
-import { createDefaultConfigInRepo } from "@/src/utils/blog-config";
-import { CONFIG_FILENAME, REPO_NAME } from "@/src/constants/github";
+import { createDefaultConfigInRepo } from "@/utils/blog-config";
+import { CONFIG_FILENAME, REPO_NAME } from "@/constants/github";
 
 export async function POST() {
   const session = await auth();

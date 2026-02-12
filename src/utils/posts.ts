@@ -1,5 +1,5 @@
-import { REPO_NAME } from "@/src/constants/github";
-import type { Post } from "@/src/types/blog";
+import { REPO_NAME } from "@/constants/github";
+import type { Post } from "@/types/blog";
 import {
   extractFrontmatter,
   extractSlugFromMDX,

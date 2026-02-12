@@ -1,4 +1,4 @@
-import { REPO_NAME } from "@/src/constants/github";
+import { REPO_NAME } from "@/constants/github";
 import { NextResponse } from "next/server";
 
 export async function GET(

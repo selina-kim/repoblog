@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Session } from "next-auth";
-import { FileIcon } from "@/src/assets/icons/FileIcon";
-import { PaletteIcon } from "@/src/assets/icons/PaletteIcon";
-import { handleSignOut } from "../actions/auth";
+import { FileIcon } from "@/assets/icons/FileIcon";
+import { PaletteIcon } from "@/assets/icons/PaletteIcon";
+import { handleSignOut } from "../app/actions/auth";
 
 const navItems = [
   {

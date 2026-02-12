@@ -1,4 +1,4 @@
-import type { BlogConfig } from "@/src/types/blog";
+import type { BlogConfig } from "@/types/blog";
 
 export const DEFAULT_BLOG_CONFIG: BlogConfig = {
   styles: {

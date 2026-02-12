@@ -1,4 +1,4 @@
-import type { BlogConfig, SpacingPreset } from "@/src/types/blog";
+import type { BlogConfig, SpacingPreset } from "@/types/blog";
 import type { CSSProperties } from "react";
 
 const SPACING_PRESETS: Record<
