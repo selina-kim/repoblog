@@ -1,18 +1,26 @@
-export interface Post {
+export interface PostFrontmatter {
+  title?: string;
+  summary?: string;
+  createdAt?: string; // ISO string?
+  lastUpdatedAt?: string; // ISO string?
+  tags?: string[];
+}
+
+export interface PostMetadata extends PostFrontmatter {
   path: string;
-  sha: string;
-  size: number;
-  title: string;
+  // sha: string; // remove for now
   slug: string;
+}
+
+export interface Post {
+  metadata: PostMetadata;
   content: string;
-  metadata?: Record<string, string>;
 }
 
 export interface TreeNode {
   name: string;
   path: string;
   type: "file" | "folder";
-  sha?: string;
   children?: TreeNode[];
   title?: string;
   slug?: string;

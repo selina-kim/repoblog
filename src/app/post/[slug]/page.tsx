@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
-import { getAllPosts, getPostBySlug } from "@/utils/posts";
+import { getAllPostsMetadata, getPostBySlug } from "@/utils/posts";
 import { getBlogConfig } from "@/utils/blog-config";
 import { generateStyleVars } from "@/utils/style-vars";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 import "@/styles/mdx.css";
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts();
+  const posts = await getAllPostsMetadata();
   return posts.map((post) => ({
     slug: post.slug,
   }));
@@ -35,11 +35,11 @@ export default async function BlogPostPage({
       <article className="mx-auto max-w-3xl px-4">
         <div className="mb-8">
           <h1 className="mb-4 text-4xl font-bold text-gray-900">
-            {post.metadata?.title || post.title}
+            {post.metadata.title}
           </h1>
-          {post.metadata?.date && (
+          {post.metadata.createdAt && (
             <p className="mb-2 text-sm text-gray-500">
-              {new Date(post.metadata.date).toLocaleDateString("en-US", {
+              {new Date(post.metadata.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
@@ -47,9 +47,9 @@ export default async function BlogPostPage({
             </p>
           )}
           {author && <p className="mb-2 text-sm text-gray-600">By {author}</p>}
-          {post.metadata?.description && (
+          {post.metadata.summary && (
             <p className="mt-4 text-lg text-gray-600">
-              {post.metadata.description}
+              {post.metadata.summary}
             </p>
           )}
         </div>

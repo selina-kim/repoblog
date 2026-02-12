@@ -3,16 +3,14 @@
 import { useEffect, useState } from "react";
 import type { TreeNode } from "@/types/blog";
 
-interface Post {
+interface PostPreview {
   path: string;
-  sha: string;
-  size: number;
-  title: string;
   slug: string;
+  title: string;
 }
 
 export function useGetPosts() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<PostPreview[]>([]);
   const [tree, setTree] = useState<TreeNode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

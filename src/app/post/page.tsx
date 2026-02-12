@@ -1,8 +1,8 @@
-import Link from "next/link";
-import { getAllPosts } from "@/utils/posts";
+import { getAllPostsMetadata } from "@/utils/posts";
+import { PostListItem } from "@/components/PostListItem";
 
 export default async function HomePage() {
-  const posts = await getAllPosts();
+  const posts = await getAllPostsMetadata();
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -19,16 +19,12 @@ export default async function HomePage() {
         ) : (
           <div className="space-y-6">
             {posts.map((post) => (
-              <Link
-                className="block rounded-lg border border-gray-200 bg-white p-6 transition-colors hover:bg-gray-50"
-                href={`/post/${post.slug}`}
+              <PostListItem
                 key={post.slug}
-              >
-                <h2 className="mb-2 text-2xl font-semibold text-gray-900">
-                  {post.title}
-                </h2>
-                <p className="text-sm text-gray-500">{post.path}</p>
-              </Link>
+                slug={post.slug}
+                summary={post.summary}
+                title={post.title || ""}
+              />
             ))}
           </div>
         )}

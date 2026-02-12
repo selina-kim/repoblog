@@ -1,48 +1,83 @@
-export function extractFrontmatter(content: string): {
-  metadata: Record<string, string>;
-  content: string;
-} {
-  const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
+import { PostFrontmatter } from "@/types/blog";
+
+function findFrontMatter(rawContent: string): RegExpMatchArray | null {
+  const frontmatterMatch = rawContent.match(/^---\s*\n([\s\S]*?)\n---/);
+  return frontmatterMatch;
+}
+
+export function extractFrontmatter(rawContent: string): PostFrontmatter | null {
+  const frontmatterMatch = findFrontMatter(rawContent);
   if (!frontmatterMatch) {
-    return { metadata: {}, content };
+    return null;
   }
 
-  const frontmatter = frontmatterMatch[1];
-  const contentWithoutFrontmatter = content
-    .slice(frontmatterMatch[0].length)
-    .trim();
+  const frontmatterBlock = frontmatterMatch[1];
 
-  const metadata: Record<string, string> = {};
-  const lines = frontmatter.split("\n");
-
+  // parse known fields for PostFrontmatter
+  const frontmatter: PostFrontmatter = {};
+  const lines = frontmatterBlock.split("\n");
   for (const line of lines) {
-    const match = line.match(/^([\w-]+):\s*["']?(.+?)["']?$/);
+    const match = line.match(/^([\w-]+):\s*(.*)$/);
     if (match) {
-      metadata[match[1]] = match[2].trim();
+      const key = match[1].trim();
+      let value = match[2].trim();
+      // remove wrapping quotes if present
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+      switch (key) {
+        case "title":
+        case "summary":
+          frontmatter[key] = value;
+          break;
+        case "createdAt":
+        case "lastUpdatedAt":
+          frontmatter[key] = value; // ISO string
+          break;
+        case "tags":
+          // support comma-separated or yaml array
+          if (value.startsWith("[") && value.endsWith("]")) {
+            try {
+              frontmatter.tags = JSON.parse(value);
+            } catch {
+              frontmatter.tags = value
+                .slice(1, -1)
+                .split(",")
+                .map((t) => t.trim())
+                .filter(Boolean);
+            }
+          } else {
+            frontmatter.tags = value
+              .split(",")
+              .map((t) => t.trim())
+              .filter(Boolean);
+          }
+          break;
+        default:
+          // TODO: ignore unknown keys for now
+          break;
+      }
     }
   }
 
-  return { metadata, content: contentWithoutFrontmatter };
+  return frontmatter;
 }
 
-export function extractTitleFromMDX(content: string): string | null {
-  const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
-  if (frontmatterMatch) {
-    const titleMatch = frontmatterMatch[1].match(/^title:\s*["']?(.+?)["']?$/m);
-    if (titleMatch) {
-      return titleMatch[1].trim();
-    }
+export function extractContent(rawContent: string): string {
+  const frontmatterMatch = findFrontMatter(rawContent);
+  if (!frontmatterMatch) {
+    return rawContent;
   }
-  return null;
+  return rawContent.slice(frontmatterMatch[0].length).trim();
 }
 
-export function extractSlugFromMDX(content: string): string | null {
-  const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
-  if (frontmatterMatch) {
-    const slugMatch = frontmatterMatch[1].match(/^slug:\s*["']?(.+?)["']?$/m);
-    if (slugMatch) {
-      return slugMatch[1].trim();
-    }
+export function extractTitle(content: string): string | null {
+  const frontmatter = extractFrontmatter(content);
+  if (frontmatter && frontmatter.title) {
+    return frontmatter.title;
   }
   return null;
 }

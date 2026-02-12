@@ -2,19 +2,13 @@ import { auth } from "@/auth";
 import { REPO_NAME } from "@/constants/github";
 import { NextResponse } from "next/server";
 import type { TreeNode } from "@/types/blog";
-import {
-  extractSlugFromMDX,
-  extractTitleFromMDX,
-  generateSlugFromFilename,
-} from "@/utils/mdx-utils";
+import { extractTitle, generateSlugFromFilename } from "@/utils/mdx-utils";
 
 export const revalidate = 60;
 
 function buildTree(
   items: {
     path: string;
-    sha: string;
-    size: number;
     title?: string;
     slug?: string;
   }[],
@@ -37,7 +31,6 @@ function buildTree(
           name: part,
           path: item.path,
           type: "file",
-          sha: item.sha,
           title: item.title,
           slug: item.slug,
         });
@@ -126,10 +119,10 @@ export async function GET() {
 
     // fetch titles for MDX files
     const postsWithTitles = await Promise.all(
-      mdFiles.map(async (item: { path: string; sha: string; size: number }) => {
+      mdFiles.map(async (item: { path: string }) => {
         const fileName = item.path.split("/").pop() || item.path;
         let title = fileName.replace(/\.(md|mdx)$/, "");
-        let slug = generateSlugFromFilename(item.path);
+        const slug = generateSlugFromFilename(item.path);
 
         // only fetch content for MDX files to extract title and slug
         if (item.path.endsWith(".mdx")) {
@@ -150,13 +143,9 @@ export async function GET() {
                 contentData.content,
                 "base64",
               ).toString("utf-8");
-              const extractedTitle = extractTitleFromMDX(content);
+              const extractedTitle = extractTitle(content);
               if (extractedTitle) {
                 title = extractedTitle;
-              }
-              const extractedSlug = extractSlugFromMDX(content);
-              if (extractedSlug) {
-                slug = extractedSlug;
               }
             }
           } catch (error) {
@@ -166,8 +155,6 @@ export async function GET() {
 
         return {
           path: item.path,
-          sha: item.sha,
-          size: item.size,
           title,
           slug,
         };

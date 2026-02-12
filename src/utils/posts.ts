@@ -1,15 +1,14 @@
 import { REPO_NAME } from "@/constants/github";
-import type { Post } from "@/types/blog";
+import type { Post, PostFrontmatter, PostMetadata } from "@/types/blog";
 import {
+  extractContent,
   extractFrontmatter,
-  extractSlugFromMDX,
-  extractTitleFromMDX,
   generateSlugFromFilename,
 } from "./mdx-utils";
 import { fetchWithRetry } from "./fetch-retry";
 
 // build-time data fetching (no user auth, uses env token)
-export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
+export async function getAllPostsMetadata(): Promise<PostMetadata[]> {
   const token = process.env.GITHUB_TOKEN;
   const owner = process.env.OWNER_GITHUB_USERNAME;
 
@@ -37,7 +36,7 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
     const repoData = await repoResponse.json();
     const defaultBranch = repoData.default_branch;
 
-    // Fetch file tree
+    // fetch file tree
     const treeResponse = await fetchWithRetry(() =>
       fetch(
         `https://api.github.com/repos/${owner}/${REPO_NAME}/git/trees/${defaultBranch}?recursive=1`,
@@ -65,12 +64,11 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
 
     // fetch metadata for each file
     const posts = await Promise.all(
-      mdFiles.map(async (item: { path: string; sha: string; size: number }) => {
-        const fileName = item.path.split("/").pop() || item.path;
-        let title = fileName.replace(/\.(md|mdx)$/, "");
-        let slug = generateSlugFromFilename(item.path);
+      mdFiles.map(async (item: { path: string }) => {
+        const slug = generateSlugFromFilename(item.path);
+        let frontmatter: PostFrontmatter = {};
 
-        // fetch content for MDX files to extract metadata
+        // fetch raw content for MDX files to extract metadata
         if (item.path.endsWith(".mdx")) {
           try {
             const contentResponse = await fetchWithRetry(() =>
@@ -91,13 +89,10 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
                 contentData.content,
                 "base64",
               ).toString("utf-8");
-              const extractedTitle = extractTitleFromMDX(content);
-              if (extractedTitle) {
-                title = extractedTitle;
-              }
-              const extractedSlug = extractSlugFromMDX(content);
-              if (extractedSlug) {
-                slug = extractedSlug;
+
+              const extractedFrontmatter = extractFrontmatter(content);
+              if (extractedFrontmatter) {
+                frontmatter = extractedFrontmatter;
               }
             }
           } catch (error) {
@@ -107,10 +102,8 @@ export async function getAllPosts(): Promise<Omit<Post, "content">[]> {
 
         return {
           path: item.path,
-          sha: item.sha,
-          size: item.size,
-          title,
           slug,
+          ...frontmatter,
         };
       }),
     );
@@ -133,10 +126,10 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   }
 
   try {
-    const posts = await getAllPosts();
-    const post = posts.find((p) => p.slug === slug);
+    const postsMetadata = await getAllPostsMetadata();
+    const postMetadata = postsMetadata.find((p) => p.slug === slug);
 
-    if (!post) {
+    if (!postMetadata) {
       return null;
     }
 
@@ -160,7 +153,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     // fetch full content
     const contentResponse = await fetchWithRetry(() =>
       fetch(
-        `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${post.path}?ref=${defaultBranch}`,
+        `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${postMetadata.path}?ref=${defaultBranch}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -178,12 +171,11 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const rawContent = Buffer.from(contentData.content, "base64").toString(
       "utf-8",
     );
-    const { metadata, content } = extractFrontmatter(rawContent);
+    const content = extractContent(rawContent);
 
     return {
-      ...post,
+      metadata: postMetadata,
       content,
-      metadata,
     };
   } catch (error) {
     console.error("Error in getPostBySlug:", error);
