@@ -44,20 +44,20 @@ export async function POST() {
 
     if (!result.success) {
       return NextResponse.json(
-        { error: result.error || "Failed to create config" },
+        { error: result.error || "Failed to create config." },
         { status: 500 },
       );
     }
 
     return NextResponse.json({
       success: true,
-      message: "Default configuration created successfully",
+      message: "Default configuration created successfully.",
       created: true,
     });
   } catch (error) {
     console.error("Error creating config:", error);
     return NextResponse.json(
-      { error: "Failed to create config" },
+      { error: "Failed to create config." },
       { status: 500 },
     );
   }

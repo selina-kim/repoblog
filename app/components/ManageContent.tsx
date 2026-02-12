@@ -4,8 +4,11 @@ import { useGetPosts } from "../hooks/useGetPosts";
 import { FileTree } from "./FileTree";
 import { Loader } from "./Loader";
 import { EditorTrigger } from "./EditorTrigger";
+import { useEnsureConfig } from "../hooks/useEnsureConfig";
 
 export function ManageContent() {
+  useEnsureConfig();
+
   const { tree, isLoading, error } = useGetPosts();
 
   return (

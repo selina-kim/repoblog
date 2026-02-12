@@ -27,21 +27,18 @@ export function useCheckRepo(
       setError(null);
 
       const response = await fetch("/api/check-repo");
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+        throw new Error(`HTTP ${response.status}: ${data.error}`);
       }
-
-      const data = await response.json();
 
       if (data.hasRepo !== undefined) {
         setHasRepo(data.hasRepo);
-      } else {
-        throw new Error(data.error || "Unknown error");
       }
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Failed to check repository",
+        err instanceof Error ? err.message : "Failed to check repository.",
       );
       setHasRepo(null);
     } finally {

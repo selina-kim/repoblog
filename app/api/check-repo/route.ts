@@ -34,13 +34,16 @@ export async function GET() {
       return NextResponse.json({ hasRepo: false });
     } else {
       return NextResponse.json(
-        { error: `Unexpected status: ${response.status}` },
+        {
+          error: response.statusText,
+        },
         { status: response.status },
       );
     }
-  } catch {
+  } catch (error) {
+    console.error("Error checking repository:", error);
     return NextResponse.json(
-      { error: "Failed to check repository" },
+      { error: "Failed to check repository." },
       { status: 500 },
     );
   }

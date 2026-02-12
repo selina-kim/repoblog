@@ -39,11 +39,7 @@ export async function createDefaultConfigInRepo(
     });
 
     // add header comment
-    const fileContent = `# Blog Styling Configuration
-# This file controls the appearance of your blog posts
-# Edit these values to customize colors, fonts, and spacing
-
-${yamlContent}`;
+    const fileContent = `# Blog Styling Configuration\n# This file controls the appearance of your blog posts\n# Edit these values to customize colors, fonts, and spacing\n\n${yamlContent}`;
 
     // create file in repo
     const createResponse = await fetch(

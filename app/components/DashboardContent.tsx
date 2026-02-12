@@ -1,7 +1,6 @@
 "use client";
 
 import { useCheckRepo } from "@/app/hooks/useCheckRepo";
-import { useEnsureConfig } from "@/app/hooks/useEnsureConfig";
 import { RepoCheck } from "./RepoCheck";
 import { ManageContent } from "./ManageContent";
 
@@ -11,8 +10,6 @@ interface DashboardContentProps {
 
 export function DashboardContent({ username }: DashboardContentProps) {
   const { hasRepo, isLoading, error, refresh } = useCheckRepo(username);
-
-  useEnsureConfig();
 
   if (hasRepo === true) {
     return <ManageContent />;

@@ -15,14 +15,15 @@ export function useEnsureConfig() {
 
         if (!response.ok) {
           const data = await response.json();
-          // 409 means config already exists, which is fine
           if (response.status !== 409) {
-            setError(data.error || "Failed to ensure config exists");
+            // 409 means config already exists, which is fine
+            throw new Error(`HTTP ${response.status}: ${data.error}`);
           }
         }
       } catch (err) {
-        console.error("Error ensuring config:", err);
-        setError("Failed to check config");
+        setError(
+          err instanceof Error ? err.message : "Failed to check repository.",
+        );
       } finally {
         setIsChecking(false);
       }
