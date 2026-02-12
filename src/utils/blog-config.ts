@@ -40,7 +40,7 @@ export async function createDefaultConfigInRepo(
     const fileContent = `# Blog Styling Configuration\n# This file controls the appearance of your blog posts\n# Edit these values to customize colors, fonts, and spacing\n\n${yamlContent}`;
 
     // create file in repo
-    const createResponse = await fetch(
+    const createConfigResponse = await fetch(
       `https://api.github.com/repos/${owner}/${REPO_NAME}/contents/${CONFIG_FILENAME}`,
       {
         method: "PUT",
@@ -58,9 +58,12 @@ export async function createDefaultConfigInRepo(
       },
     );
 
-    if (!createResponse.ok) {
-      const error = await createResponse.text();
-      return { success: false, error: `Failed to create config: ${error}` };
+    if (!createConfigResponse.ok) {
+      const data = await createConfigResponse.json();
+      return {
+        success: false,
+        error: `Failed to create config: ${data.error}`,
+      };
     }
 
     return { success: true };
