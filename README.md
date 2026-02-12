@@ -2,13 +2,15 @@
 
 ### TODO
 
-- [x] change slug logic
-- [x] refine `Post` type definition
-- [x] refactor potentially redundant code between the rendering of post (visitor view) and the editor mode of post
+- [ ] use [t3 env](https://env.t3.gg/docs/nextjs) for env instead
+- [ ] use [octokit](https://github.com/octokit/octokit.js) for github rest API instead
+  - [ ] pagination for pulling repo data?
+- [ ] use [remark](https://github.com/remarkjs/remark-frontmatter) for frontmatter parsing instead of regex
+- [ ] bug: mdx comments causing issues?
+- [ ] syntax highlighting for view mode post
 - [ ] implement the Appearances tab on dashboard
 - [ ] currently only has WYSIWYG editor, add a toggle for an editor mode that shows raw code with separate preview
 - [ ] might be better to store owner display name in the `config.yaml`?
-- [ ] pagination for pulling repo data?
 
 ### Setup & Installation
 
