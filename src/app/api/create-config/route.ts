@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 import { createDefaultConfigInRepo } from "@/utils/blog-config";
+import { Octokit } from "octokit";
 import { CONFIG_FILENAME, REPO_NAME } from "@/constants/github";
 
 export async function POST() {
@@ -19,19 +20,17 @@ export async function POST() {
   const username = session.user.username;
 
   try {
+    const octokit = new Octokit({ auth: session.accessToken });
+
     // first check if config already exists
-    const checkResponse = await fetch(
-      `https://api.github.com/repos/${username}/${REPO_NAME}/contents/${CONFIG_FILENAME}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session.accessToken}`,
-          Accept: "application/vnd.github+json",
-        },
-      },
-    );
+    const checkConfigResponse = await octokit.rest.repos.getContent({
+      owner: username,
+      repo: REPO_NAME,
+      path: CONFIG_FILENAME,
+    });
 
     // if config exists, return success without creating
-    if (checkResponse.ok) {
+    if (checkConfigResponse.status === 200) {
       return NextResponse.json({
         success: true,
         message: "Configuration already exists",
