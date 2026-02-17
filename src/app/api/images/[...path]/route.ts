@@ -1,5 +1,6 @@
 import { REPO_NAME } from "@/constants/github";
 import { NextResponse } from "next/server";
+import { env } from "@/env";
 
 export async function GET(
   request: Request,
@@ -7,8 +8,8 @@ export async function GET(
 ) {
   const { path } = await params;
   const imagePath = path.join("/");
-  const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.OWNER_GITHUB_USERNAME;
+  const token = env.GITHUB_TOKEN;
+  const owner = env.OWNER_GITHUB_USERNAME;
 
   if (!token || !owner) {
     return NextResponse.json(

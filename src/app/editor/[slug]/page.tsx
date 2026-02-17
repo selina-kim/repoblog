@@ -4,6 +4,7 @@ import { getBlogConfig } from "@/utils/blog-config";
 import { generateStyleVars } from "@/utils/style-vars";
 import { notFound, redirect } from "next/navigation";
 import { getPostBySlug } from "@/utils/posts";
+import { env } from "@/env";
 
 export default async function EditorPage({
   params,
@@ -16,7 +17,7 @@ export default async function EditorPage({
     redirect("/signin");
   }
 
-  const author = process.env.OWNER_DISPLAY_NAME;
+  const author = env.OWNER_DISPLAY_NAME;
   const { slug } = await params;
   const isNewDraft = slug === "draft";
 

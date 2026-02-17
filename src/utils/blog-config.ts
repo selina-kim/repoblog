@@ -3,11 +3,12 @@ import type { BlogConfig } from "@/types/blog";
 import { DEFAULT_BLOG_CONFIG } from "@/constants/default-blog-config";
 import yaml from "js-yaml";
 import { fetchWithRetry } from "./fetch-retry";
+import { env } from "@/env";
 
 export async function createDefaultConfigInRepo(
   accessToken: string,
 ): Promise<{ success: boolean; error?: string }> {
-  const owner = process.env.OWNER_GITHUB_USERNAME;
+  const owner = env.OWNER_GITHUB_USERNAME;
 
   if (!owner) {
     return { success: false, error: "Missing OWNER_GITHUB_USERNAME" };
@@ -77,8 +78,8 @@ export async function createDefaultConfigInRepo(
 }
 
 export async function getBlogConfig(): Promise<BlogConfig> {
-  const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.OWNER_GITHUB_USERNAME;
+  const token = env.GITHUB_TOKEN;
+  const owner = env.OWNER_GITHUB_USERNAME;
 
   if (!token || !owner) {
     console.warn("Missing GitHub credentials, using default config");

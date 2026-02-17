@@ -6,11 +6,12 @@ import {
   generateSlugFromFilename,
 } from "./mdx-utils";
 import { fetchWithRetry } from "./fetch-retry";
+import { env } from "@/env";
 
 // build-time data fetching (no user auth, uses env token)
 export async function getAllPostsMetadata(): Promise<PostMetadata[]> {
-  const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.OWNER_GITHUB_USERNAME;
+  const token = env.GITHUB_TOKEN;
+  const owner = env.OWNER_GITHUB_USERNAME;
 
   if (!token || !owner) {
     throw new Error(
@@ -116,8 +117,8 @@ export async function getAllPostsMetadata(): Promise<PostMetadata[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
-  const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.OWNER_GITHUB_USERNAME;
+  const token = env.GITHUB_TOKEN;
+  const owner = env.OWNER_GITHUB_USERNAME;
 
   if (!token || !owner) {
     throw new Error(

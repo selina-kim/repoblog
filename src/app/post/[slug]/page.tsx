@@ -3,6 +3,7 @@ import { getAllPostsMetadata, getPostBySlug } from "@/utils/posts";
 import { getBlogConfig } from "@/utils/blog-config";
 import { generateStyleVars } from "@/utils/style-vars";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
+import { env } from "@/env";
 import "@/styles/mdx.css";
 
 export async function generateStaticParams() {
@@ -28,7 +29,7 @@ export default async function BlogPostPage({
   }
 
   const styleVars = generateStyleVars(config);
-  const author = process.env.OWNER_DISPLAY_NAME;
+  const author = env.OWNER_DISPLAY_NAME;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
