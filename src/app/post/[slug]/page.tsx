@@ -1,10 +1,17 @@
 import { notFound } from "next/navigation";
-import { getPostBySlug } from "@/utils/app/posts";
+import { getPostBySlug, getAllPostsMetadata } from "@/utils/app/posts";
 import { getBlogConfig } from "@/utils/app/blog-config";
 import { generateStyleVars } from "@/utils/style-vars";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 import { env } from "@/env";
 import "@/styles/mdx.css";
+
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const posts = await getAllPostsMetadata();
+  return posts.map((post) => ({ slug: post.slug }));
+}
 
 export default async function BlogPostPage({
   params,
