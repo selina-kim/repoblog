@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
-import { createDefaultConfig } from "@/utils/blog-config";
+import { createDefaultConfig } from "@/utils/user/default-config";
 import { Octokit, RequestError } from "octokit";
 import { CONFIG_FILENAME, REPO_NAME } from "@/constants/github";
 
@@ -40,7 +40,7 @@ export async function POST() {
     } catch (error) {
       // if config doesn't exist, create it
       if ((error as RequestError).status === 404) {
-        await createDefaultConfig(session.accessToken);
+        await createDefaultConfig(session.accessToken, username);
         return NextResponse.json({
           success: true,
           message: "Default configuration created successfully",

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getAllPostsMetadata, getPostBySlug } from "@/utils/posts";
-import { getBlogConfig } from "@/utils/blog-config";
+import { getBlogConfig } from "@/utils/app/blog-config";
 import { generateStyleVars } from "@/utils/style-vars";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 import { env } from "@/env";

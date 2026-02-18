@@ -1,6 +1,6 @@
 import Tiptap from "@/components/Tiptap";
 import { auth } from "@/auth";
-import { getBlogConfig } from "@/utils/blog-config";
+import { getBlogConfig } from "@/utils/app/blog-config";
 import { generateStyleVars } from "@/utils/style-vars";
 import { notFound, redirect } from "next/navigation";
 import { getPostBySlug } from "@/utils/posts";
