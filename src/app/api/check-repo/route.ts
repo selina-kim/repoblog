@@ -20,16 +20,14 @@ export async function GET() {
   try {
     const username = session.user.username;
     const octokit = new Octokit({ auth: session.accessToken });
-    const response = await fetchWithRetry(() =>
+    await fetchWithRetry(() =>
       octokit.rest.repos.get({
         owner: username,
         repo: REPO_NAME,
       }),
     );
 
-    if (response.status === 200) {
-      return NextResponse.json({ hasRepo: true });
-    }
+    return NextResponse.json({ hasRepo: true });
   } catch (error) {
     const reqError = error as RequestError;
     console.error(reqError.status, reqError.message);

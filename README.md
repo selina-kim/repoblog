@@ -1,5 +1,27 @@
 ## Development
 
+### Project Structure
+
+```
+/project-root
+│
+├─ public/
+├─ src/
+│   ├─ app/               # Next.js app directory (routes, pages, layouts)
+│   ├─ assets/            # Static assets (icons, svgs, etc)
+│   ├─ components/        # Reusable React components
+│   ├─ constants/
+│   ├─ hooks/
+│   ├─ styles/
+│   ├─ types/
+│   └─ utils/             # Utility functions
+│       ├─ app/           # App token utils (env variables)
+│       └─ user/          # User token utils (OAuth)
+│
+├─ .env.local             # Environment variables
+└─ README.md              # Project documentation
+```
+
 ### TODO
 
 - [x] use [t3 env](https://env.t3.gg/docs/nextjs) for env instead

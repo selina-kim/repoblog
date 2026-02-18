@@ -1,6 +1,8 @@
 import { REPO_NAME } from "@/constants/github";
 import { NextResponse } from "next/server";
 import { env } from "@/env";
+import { Octokit, RequestError } from "octokit";
+import { fetchWithRetry } from "@/utils/fetch-retry";
 
 export async function GET(
   request: Request,
@@ -9,9 +11,10 @@ export async function GET(
   const { path } = await params;
   const imagePath = path.join("/");
   const token = env.GITHUB_TOKEN;
-  const owner = env.OWNER_GITHUB_USERNAME;
+  const username = env.OWNER_GITHUB_USERNAME;
+  const octokit = new Octokit({ auth: token });
 
-  if (!token || !owner) {
+  if (!token || !username) {
     return NextResponse.json(
       { error: "GitHub credentials not configured" },
       { status: 500 },
@@ -19,28 +22,27 @@ export async function GET(
   }
 
   try {
-    // fetch image from GitHub raw content
-    const url = `https://raw.githubusercontent.com/${owner}/${REPO_NAME}/main/images/${imagePath}`;
+    const response = await fetchWithRetry(() =>
+      octokit.rest.repos.getContent({
+        owner: username,
+        repo: REPO_NAME,
+        path: `images/${imagePath}`,
+        mediaType: {
+          format: "raw",
+        },
+        request: {
+          parseSuccessResponseBody: false,
+        },
+      }),
+    );
 
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github.raw",
-      },
-      next: { revalidate: 3600 }, // cache for 1 hour
-    });
+    // octokit matches anything that is not JSON nor charset utf-8 and blindly transforms it to text
+    // need to do type acrobatics, because the return type doesn't take into account `request.parseSuccessResponseBody`
+    const res = new Response(response.data as unknown as ReadableStream);
+    const blob = await res.blob();
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: "Image not found" },
-        { status: response.status },
-      );
-    }
-
-    const blob = await response.blob();
     const contentType =
-      response.headers.get("Content-Type") || "application/octet-stream";
-
+      response.headers["content-type"] || "application/octet-stream";
     return new Response(blob, {
       headers: {
         "Content-Type": contentType,
@@ -48,10 +50,11 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Error fetching image:", error);
+    const reqError = error as RequestError;
+    console.error(reqError.status, reqError.message);
     return NextResponse.json(
-      { error: "Failed to fetch image" },
-      { status: 500 },
+      { error: `Failed to fetch image: ${reqError.message}` },
+      { status: reqError.status },
     );
   }
 }
