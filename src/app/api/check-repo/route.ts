@@ -1,6 +1,8 @@
 import { auth } from "@/auth";
 import { REPO_NAME } from "@/constants/github";
+import { fetchWithRetry } from "@/utils/fetch-retry";
 import { NextResponse } from "next/server";
+import { Octokit, RequestError } from "octokit";
 
 export async function GET() {
   const session = await auth();
@@ -15,36 +17,25 @@ export async function GET() {
     );
   }
 
-  const username = session.user.username;
-
   try {
-    const response = await fetch(
-      `https://api.github.com/repos/${username}/${REPO_NAME}`,
-      {
-        headers: {
-          Accept: "application/vnd.github+json",
-          Authorization: `Bearer ${session.accessToken}`,
-        },
-      },
+    const username = session.user.username;
+    const octokit = new Octokit({ auth: session.accessToken });
+    const response = await fetchWithRetry(() =>
+      octokit.rest.repos.get({
+        owner: username,
+        repo: REPO_NAME,
+      }),
     );
 
     if (response.status === 200) {
       return NextResponse.json({ hasRepo: true });
-    } else if (response.status === 404) {
-      return NextResponse.json({ hasRepo: false });
-    } else {
-      return NextResponse.json(
-        {
-          error: response.statusText,
-        },
-        { status: response.status },
-      );
     }
   } catch (error) {
-    console.error("Error checking repository:", error);
+    const reqError = error as RequestError;
+    console.error(reqError.status, reqError.message);
     return NextResponse.json(
-      { error: "Failed to check repository." },
-      { status: 500 },
+      { error: `Failed to check respository: ${reqError.message}` },
+      { status: reqError.status },
     );
   }
 }
