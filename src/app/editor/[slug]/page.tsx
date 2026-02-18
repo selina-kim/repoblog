@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { getBlogConfig } from "@/utils/app/blog-config";
 import { generateStyleVars } from "@/utils/style-vars";
 import { notFound, redirect } from "next/navigation";
-import { getPostBySlug } from "@/utils/posts";
+import { getPostBySlug } from "@/utils/app/posts";
 import { env } from "@/env";
 
 export default async function EditorPage({

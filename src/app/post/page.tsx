@@ -1,4 +1,4 @@
-import { getAllPostsMetadata } from "@/utils/posts";
+import { getAllPostsMetadata } from "@/utils/app/posts";
 import { PostListItem } from "@/components/PostListItem";
 
 export default async function HomePage() {
