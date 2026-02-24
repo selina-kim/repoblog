@@ -24,7 +24,7 @@ export function ManagePosts() {
     if (configError) {
       return (
         <div className="rounded-lg border border-red-200 bg-red-50 p-6">
-          <h2 className="mb-2 text-xl font-semibold text-red-800">Error</h2>
+          <h2 className="mb-2 text-xl font-semibold text-red-600">Error</h2>
           <p className="text-red-600">{configError}</p>
         </div>
       );
@@ -42,7 +42,14 @@ export function ManagePosts() {
       );
     }
     if (getPostsError) {
-      return <p className="text-center text-red-600">Error: {getPostsError}</p>;
+      return (
+        <p className="text-center text-red-600">
+          <span className="rounded bg-red-100 p-1 font-semibold text-red-600">
+            Error
+          </span>{" "}
+          {getPostsError}
+        </p>
+      );
     }
     if (tree.length === 0) {
       return (

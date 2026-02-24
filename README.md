@@ -25,7 +25,7 @@
 ### TODO
 
 - [x] use [t3 env](https://env.t3.gg/docs/nextjs) for env instead
-- [ ] use [octokit](https://github.com/octokit/octokit.js) for github rest API instead
+- [x] use [octokit](https://github.com/octokit/octokit.js) for github rest API instead
   - [ ] pagination for pulling repo data?
 - [ ] use [remark](https://github.com/remarkjs/remark-frontmatter) for frontmatter parsing instead of regex
 - [ ] bug: mdx comments causing issues?

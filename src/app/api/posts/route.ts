@@ -3,6 +3,8 @@ import { REPO_NAME } from "@/constants/github";
 import { NextResponse } from "next/server";
 import type { TreeNode } from "@/types/blog";
 import { extractTitle, generateSlugFromFilename } from "@/utils/mdx-utils";
+import { Octokit, RequestError } from "octokit";
+import { fetchWithRetry } from "@/utils/fetch-retry";
 
 export const revalidate = 60;
 
@@ -67,48 +69,31 @@ export async function GET() {
     );
   }
 
-  const username = session.user.username;
   try {
     // get the repository info to find the default branch
-    const repoResponse = await fetch(
-      `https://api.github.com/repos/${username}/${REPO_NAME}`,
-      {
-        headers: {
-          Authorization: `Bearer ${session.accessToken}`,
-          Accept: "application/vnd.github+json",
-        },
-      },
+    const username = session.user.username;
+    const octokit = new Octokit({ auth: session.accessToken });
+    const repoResponse = await fetchWithRetry(() =>
+      octokit.rest.repos.get({
+        owner: username,
+        repo: REPO_NAME,
+      }),
     );
 
-    if (!repoResponse.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch repository info" },
-        { status: repoResponse.status },
-      );
-    }
+    const defaultBranch = repoResponse.data.default_branch;
 
-    const repoData = await repoResponse.json();
-    const defaultBranch = repoData.default_branch;
-
-    // fetch the file tree from the default branch
-    const treeResponse = await fetch(
-      `https://api.github.com/repos/${username}/${REPO_NAME}/git/trees/${defaultBranch}?recursive=1`,
-      {
-        headers: {
-          Authorization: `Bearer ${session.accessToken}`,
-          Accept: "application/vnd.github+json",
-        },
-      },
+    // fetch file tree
+    const treeResponse = await fetchWithRetry(() =>
+      octokit.rest.git.getTree({
+        owner: username,
+        repo: REPO_NAME,
+        tree: defaultBranch,
+        tree_sha: defaultBranch,
+        recursive: "true",
+      }),
     );
 
-    if (!treeResponse.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch file tree" },
-        { status: treeResponse.status },
-      );
-    }
-
-    const treeData = await treeResponse.json();
+    const treeData = treeResponse.data;
 
     // filter for .md and .mdx files
     const mdFiles = treeData.tree.filter(
@@ -124,21 +109,20 @@ export async function GET() {
         let title = fileName.replace(/\.(md|mdx)$/, "");
         const slug = generateSlugFromFilename(item.path);
 
-        // only fetch content for MDX files to extract title and slug
+        // fetch raw content for MDX files to extract title and slug
         if (item.path.endsWith(".mdx")) {
           try {
-            const contentResponse = await fetch(
-              `https://api.github.com/repos/${username}/${REPO_NAME}/contents/${item.path}?ref=${defaultBranch}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${session.accessToken}`,
-                  Accept: "application/vnd.github+json",
-                },
-              },
+            const contentResponse = await fetchWithRetry(() =>
+              octokit.rest.repos.getContent({
+                owner: username,
+                repo: REPO_NAME,
+                path: item.path,
+              }),
             );
 
-            if (contentResponse.ok) {
-              const contentData = await contentResponse.json();
+            const contentData = contentResponse.data;
+
+            if (!Array.isArray(contentData) && contentData.type === "file") {
               const content = Buffer.from(
                 contentData.content,
                 "base64",
@@ -147,6 +131,8 @@ export async function GET() {
               if (extractedTitle) {
                 title = extractedTitle;
               }
+            } else {
+              throw new Error(`${item.path} file not found`);
             }
           } catch (error) {
             console.error(`Error fetching content for ${item.path}:`, error);
@@ -165,10 +151,11 @@ export async function GET() {
 
     return NextResponse.json({ tree, posts: postsWithTitles });
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    const reqError = error as RequestError;
+    console.error(reqError.status, reqError.message);
     return NextResponse.json(
-      { error: "Failed to fetch posts" },
-      { status: 500 },
+      { error: `Failed to fetch posts: ${reqError.message}` },
+      { status: reqError.status },
     );
   }
 }
