@@ -1,10 +1,6 @@
 import { REPO_NAME } from "@/constants/github";
 import type { Post, PostFrontmatter, PostMetadata } from "@/types/blog";
-import {
-  extractContent,
-  extractFrontmatter,
-  generateSlugFromFilename,
-} from "../mdx-utils";
+import { parseRawMdx, generateSlugFromFilename } from "../mdx-utils";
 import { fetchWithRetry } from "../fetch-retry";
 import { env } from "@/env";
 import { Octokit } from "octokit";
@@ -70,7 +66,8 @@ export async function getAllPostsMetadata(): Promise<PostMetadata[]> {
                 "base64",
               ).toString("utf-8");
 
-              const extractedFrontmatter = extractFrontmatter(content);
+              const { frontmatter: extractedFrontmatter } =
+                parseRawMdx(content);
 
               if (extractedFrontmatter) {
                 frontmatter = extractedFrontmatter;
@@ -126,7 +123,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
         "utf-8",
       );
 
-      const content = extractContent(rawContent);
+      const { content } = parseRawMdx(rawContent);
 
       return {
         metadata: postMetadata,

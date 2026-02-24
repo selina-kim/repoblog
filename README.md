@@ -27,7 +27,7 @@
 - [x] use [t3 env](https://env.t3.gg/docs/nextjs) for env instead
 - [x] use [octokit](https://github.com/octokit/octokit.js) for github rest API instead
   - [ ] pagination for pulling repo data?
-- [ ] use [remark](https://github.com/remarkjs/remark-frontmatter) for frontmatter parsing instead of regex
+- [x] use [remark](https://github.com/remarkjs/remark-frontmatter) for frontmatter parsing instead of regex
 - [ ] bug: mdx comments causing issues?
 - [ ] syntax highlighting for view mode post
 - [ ] implement the Appearances tab on dashboard

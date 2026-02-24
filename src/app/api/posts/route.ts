@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { REPO_NAME } from "@/constants/github";
 import { NextResponse } from "next/server";
 import type { TreeNode } from "@/types/blog";
-import { extractTitle, generateSlugFromFilename } from "@/utils/mdx-utils";
+import { generateSlugFromFilename, parseRawMdx } from "@/utils/mdx-utils";
 import { Octokit, RequestError } from "octokit";
 import { fetchWithRetry } from "@/utils/fetch-retry";
 
@@ -127,9 +127,9 @@ export async function GET() {
                 contentData.content,
                 "base64",
               ).toString("utf-8");
-              const extractedTitle = extractTitle(content);
-              if (extractedTitle) {
-                title = extractedTitle;
+              const { frontmatter } = parseRawMdx(content);
+              if (frontmatter?.title) {
+                title = frontmatter?.title;
               }
             } else {
               throw new Error(`${item.path} file not found`);
