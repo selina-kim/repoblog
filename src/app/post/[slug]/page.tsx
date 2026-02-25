@@ -5,6 +5,7 @@ import { generateStyleVars } from "@/utils/style-vars";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 import { env } from "@/env";
 import "@/styles/mdx.css";
+import { TagPills } from "@/components/TagPills";
 
 export const revalidate = 3600;
 
@@ -38,6 +39,7 @@ export default async function BlogPostPage({
           <h1 className="mb-4 text-4xl font-bold text-gray-900">
             {post.metadata.title}
           </h1>
+          {post.metadata.tags && <TagPills pills={post.metadata.tags} />}
           {post.metadata.createdAt && (
             <p className="mb-2 text-sm text-gray-500">
               {new Date(post.metadata.createdAt).toLocaleDateString("en-US", {
