@@ -28,8 +28,9 @@
 - [x] use [octokit](https://github.com/octokit/octokit.js) for github rest API instead
   - [ ] pagination for pulling repo data?
 - [x] use [remark](https://github.com/remarkjs/remark-frontmatter) for frontmatter parsing instead of regex
-- [ ] bug: mdx comments causing issues?
-- [ ] syntax highlighting for view mode post
+- [ ] use Tiptap static render or read-only instance for viewing posts (remove MDXRemote eventually)
+  - [ ] bug: mdx comments causing issues?
+  - [ ] syntax highlighting for view mode post
 - [ ] implement the Appearances tab on dashboard
 - [ ] currently only has WYSIWYG editor, add a toggle for an editor mode that shows raw code with separate preview
 - [ ] might be better to store owner display name in the `config.yaml`?
